@@ -1,4 +1,5 @@
 #!/bin/bash
+# Automation script for compiling *.ui files from QtDesigner into *.py files
 # Params: root project directory, ui directory, output compiled python files directory
 # Example sh pyuic_compile_design.sh . design ui
 
