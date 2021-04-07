@@ -1,0 +1,5 @@
+<RCC>
+  <qresource prefix="db-logos">
+    <file>resources_data/postgres_logo.png</file>
+  </qresource>
+</RCC>
