@@ -2,16 +2,16 @@ import sys
 
 from PyQt5.QtWidgets import QMainWindow, QApplication
 
-from sqldiff.ui.designer.main_window import Ui_MainWindow
+from sqldiff.ui.main_window import MainWindow
 
+# Load resources
+import ui.designer.resources_rc
+# Process initial data
+import appdata.initial
 
-class MainWindow(QMainWindow, Ui_MainWindow):
-    def __init__(self):
-        super().__init__()
-        self.setupUi(self)
-        self.show()
+import sys
 
-
-app = QApplication(sys.argv)
-w = MainWindow()
-app.exec_()
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    w = MainWindow()
+    app.exec_()
