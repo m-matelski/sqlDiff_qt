@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DriverSpecificationForm</class>
- <widget class="QWidget" name="DriverSpecificationForm">
+ <class>DriverForm</class>
+ <widget class="QWidget" name="DriverForm">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>893</width>
-    <height>673</height>
+    <width>922</width>
+    <height>729</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>Driver</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="3" column="0">
@@ -103,7 +103,11 @@
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_2">
             <item>
-             <widget class="KSeparator" name="kseparator"/>
+             <widget class="Line" name="line">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QLabel" name="label">
@@ -250,7 +254,7 @@
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap resource="resources.qrc">:/db-logos/resources_data/postgres_logo.png</pixmap>
+        <pixmap resource="resources.qrc">:/resources_data/db_logo/postgres.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>true</bool>
@@ -274,13 +278,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>KSeparator</class>
-   <extends>QFrame</extends>
-   <header>kseparator.h</header>
-  </customwidget>
- </customwidgets>
  <resources>
   <include location="resources.qrc"/>
  </resources>
