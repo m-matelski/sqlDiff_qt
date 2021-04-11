@@ -1,5 +1,4 @@
-import path
-import models
-from sqldiff.appdata.persistence import JsonPersistenceManager
+from sqldiff.appdata import path, models
+from sqldiff.appdata.persistence import JsonFilePersistenceManager
 
-driver_manager = JsonPersistenceManager(path.DRIVERS_FILE_PATH, models.DriverPersistence, key='id')
+driver_manager = JsonFilePersistenceManager(path.DRIVERS_FILE_PATH, models.DriverPersistence, key='id')

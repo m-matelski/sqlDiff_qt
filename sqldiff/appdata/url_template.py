@@ -16,7 +16,10 @@ class BaseUrlTemplate(ABC):
 
 
 class MandatoryFieldsUrlTemplate(BaseUrlTemplate):
-    """Fills mandatory parameters between '{}' brackets. Throws KeyError if argument missing"""
+    """
+    JDBC url template with mandatory parameters.
+    Fills mandatory parameters between '{}' brackets. Throws KeyError if argument missing
+    """
 
     def __init__(self, template: str):
         self.template = template
@@ -61,22 +64,7 @@ class OptionalFieldsUrlTemplate(BaseUrlTemplate):
         return url
 
 
-class JdbcUrlTemplateModelField(str):
-    @classmethod
-    def __get_validators__(cls):
-        yield cls.validate
-
-    @classmethod
-    def validate(cls, v):
-        print('dupa')
-        if not isinstance(v, str):
-            raise TypeError('Template must be a string')
-        return v
-        # TODO further validation
-
-
 class JdbcUrlTemplate(BaseUrlTemplate):
-    ModelField = JdbcUrlTemplateModelField
 
     def __init__(self, template: str):
         self.template = template
@@ -86,4 +74,3 @@ class JdbcUrlTemplate(BaseUrlTemplate):
         mandatory_fields_url_template = MandatoryFieldsUrlTemplate(optional_fields_url_template.feed(args))
         url = mandatory_fields_url_template.feed(args)
         return url
-

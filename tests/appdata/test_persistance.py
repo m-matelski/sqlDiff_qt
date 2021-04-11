@@ -5,7 +5,7 @@ from typing import List
 from pydantic import BaseModel
 
 from sqldiff.appdata.models import PersistenceModel
-from sqldiff.appdata.persistence import JsonPersistenceManager
+from sqldiff.appdata.persistence import JsonFilePersistenceManager
 
 
 class TestModel(BaseModel):
@@ -31,14 +31,14 @@ class TestJsonPersistenceManager(unittest.TestCase):
 
     def test_insert(self):
         """Test inserting data using manager"""
-        pm = JsonPersistenceManager(FILE_PATH, TestPersistenceModel, key='id')
+        pm = JsonFilePersistenceManager(FILE_PATH, TestPersistenceModel, key='id')
         record1 = TestModel(id=1, field1='value1')
         pm.insert(record1)
         self.assertEqual(record1, pm.data[0])
 
     def test_delete(self):
         """Test delete record"""
-        pm = JsonPersistenceManager(FILE_PATH, TestPersistenceModel, key='id')
+        pm = JsonFilePersistenceManager(FILE_PATH, TestPersistenceModel, key='id')
         record1 = TestModel(id=1, field1='value1')
         record2 = TestModel(id=2, field1='value2')
         pm.insert(record1)
@@ -50,7 +50,7 @@ class TestJsonPersistenceManager(unittest.TestCase):
 
     def test_update(self):
         """Test update record"""
-        pm = JsonPersistenceManager(FILE_PATH, TestPersistenceModel, key='id')
+        pm = JsonFilePersistenceManager(FILE_PATH, TestPersistenceModel, key='id')
         record1 = TestModel(id=1, field1='value1')
         record2 = TestModel(id=2, field1='value2')
         pm.insert(record1)
@@ -63,7 +63,7 @@ class TestJsonPersistenceManager(unittest.TestCase):
 
     def test_transactions(self):
         """Test transaction commit and rollback"""
-        pm = JsonPersistenceManager(FILE_PATH, TestPersistenceModel, key='id')
+        pm = JsonFilePersistenceManager(FILE_PATH, TestPersistenceModel, key='id')
         record1 = TestModel(id=1, field1='value1')
         record2 = TestModel(id=2, field1='value2')
         pm.insert(record1)
