@@ -56,7 +56,11 @@ class PersistenceManager(ABC):
         pass
 
 
-class JsonPersistenceManager(PersistenceManager):
+class JsonFilePersistenceManager(PersistenceManager):
+    """
+    Persistence Manager allowing to CRUD data in JSON format from/to specified file path.
+    Allows finding records.
+    """
 
     def __init__(self, file_path: str, PersistenceModel: Type[PersistenceModel], key: Union[str, List[str]]):
         self.key = key
@@ -64,6 +68,15 @@ class JsonPersistenceManager(PersistenceManager):
         self.file_path = file_path
         self.data = None
         self._read_persistence_data()
+
+    def __iter__(self):
+        return iter(self.data)
+
+    def __getitem__(self, item):
+        return self.data[item]
+
+    def __len__(self):
+        return len(self.data)
 
     @property
     def key(self):
@@ -147,6 +160,4 @@ class JsonPersistenceManager(PersistenceManager):
 
     def rollback(self):
         self._read_persistence_data()
-
-
 
