@@ -60,7 +60,7 @@ class BaseDriver(BaseModel):
     driver_type: DriverTypes = Field(..., title='Driver Type', description='Database driver type.')
     jdbc_class_name: str = Field(..., title='JDBC class name',
                                  description='JDBC class name in attached driver *.jar file.')
-    url_template: JdbcUrlTemplate.ModelField = Field(..., title='JDBC URL template')
+    url_template: str = Field(..., title='JDBC URL template')
     default_port: Optional[int] = Field(..., title='Port', description='Default database connection port.')
     # will cause the input value to be passed to re.compile(v) to create a regex
     expected_driver_files: List[Pattern] = Field(..., title='Expected driver files',
