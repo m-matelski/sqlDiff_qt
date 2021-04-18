@@ -1,11 +1,15 @@
 <RCC>
   <qresource>
+    <file>resources_data/db_logo/generic.png</file>
     <file>resources_data/db_logo/postgres.png</file>
     <file>resources_data/db_logo/teradata.png</file>
   </qresource>
   <qresource>
-    <file>resources_data/db_icon/database_generic.png</file>
+    <file>resources_data/db_icon/generic.png</file>
     <file>resources_data/db_icon/teradata.png</file>
     <file>resources_data/db_icon/postgres.png</file>
+  </qresource>
+  <qresource>
+    <file>resources_data/app_icon/jar_icon.png</file>
   </qresource>
 </RCC>

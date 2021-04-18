@@ -1,5 +1,3 @@
-import sys
-
 from PyQt5.QtWidgets import QMainWindow, QApplication
 
 from sqldiff.ui.main_window import MainWindow

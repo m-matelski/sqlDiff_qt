@@ -4,14 +4,7 @@ from uuid import uuid4
 
 from pydantic import Field, FilePath, constr, UUID4, SecretStr
 from pydantic import BaseModel as PydanticBaseModel
-
-from sqldiff.appdata.url_template import JdbcUrlTemplate
-
-
-class DriverTypes(str, Enum):
-    GENERIC = 'Generic'
-    POSTGRES = 'PostgreSQL'
-    TERADATA = 'Teradata'
+from pathlib import Path
 
 
 class BaseModel(PydanticBaseModel):
@@ -52,12 +45,17 @@ class GenericConnection(SchemaConnection, DatabaseConnection):
 # DRIVERS
 #################
 
+class DriverType(BaseModel):
+    name: str = Field(..., title='Driver type name', description='Database driver type name.')
+    icon_file_path: Path = Field(..., description='Image file name of database icon in qt resources')
+    logo_file_path: Path = Field(..., description='Image file name of database logo in qt resources')
+
 
 class BaseDriver(BaseModel):
     # Predefined values
     id: UUID4 = Field(default_factory=uuid4)
     driver_name: str = Field(..., title='Driver Name', description='Unique driver definition name.')
-    driver_type: DriverTypes = Field(..., title='Driver Type', description='Database driver type.')
+    driver_type: DriverType = Field(..., title='Driver Type', description='Database driver type.')
     jdbc_class_name: str = Field(..., title='JDBC class name',
                                  description='JDBC class name in attached driver *.jar file.')
     url_template: str = Field(..., title='JDBC URL template')
@@ -91,10 +89,13 @@ class PersistenceModel(BaseModel):
     def __len__(self):
         return len(self.data)
 
-    def append(self, item):
+    def append_r(self, item):
         self.data.append(item)
 
 
 class DriverPersistence(PersistenceModel):
     data: List[BaseDriver]
 
+
+class DriverTypePersistence(PersistenceModel):
+    data: List[DriverType]

@@ -109,7 +109,7 @@ class JsonFilePersistenceManager(PersistenceManager):
 
     def insert(self, entry):
         if self.key_attr_getter(entry) not in self.key_attrs:
-            self.data.append(entry)
+            self.data.append_r(entry)
         else:
             raise RecordAlreadyExists(f"Record with keys: {self.key} = {self.key_attr_getter(entry)}, "
                                       f"already exists.")
@@ -122,7 +122,9 @@ class JsonFilePersistenceManager(PersistenceManager):
     def update(self, entry):
         self.delete(entry)
         self.insert(entry)
-        pass
+
+    def upsert(self, entry):
+        self.update(entry)
 
     def find_by(self, **field_conditions):
         field_names = tuple(field_conditions.keys())

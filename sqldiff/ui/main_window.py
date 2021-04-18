@@ -1,8 +1,10 @@
+from PyQt5 import QtCore
 from PyQt5.QtWidgets import QMainWindow
 
 from sqldiff.ui.designer.ui_main_window import Ui_MainWindow
 from sqldiff.ui.driver_form import DriverForm
 from sqldiff.ui.driver_manager import DriverManager
+from sqldiff.appdata.managers import driver_manager, driver_type_manager
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -17,7 +19,5 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.actionDriverManager.triggered.connect(self.open_driver_manager_window)
 
     def open_driver_manager_window(self):
-        if self.driver_manager_window is None:
-            self.driver_manager_window = DriverManager()
+        self.driver_manager_window = DriverManager(driver_manager, driver_type_manager)
         self.driver_manager_window.show()
-
