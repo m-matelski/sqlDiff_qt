@@ -2,21 +2,24 @@ from PyQt5.QtWidgets import QWidget
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
 
+from sqldiff.appdata.crud import get_drivers
 from sqldiff.ui.designer.ui_driver_manager import Ui_DriverManager
 
-from sqldiff.appdata.persistence import PersistenceManager
 from sqldiff.ui.driver_form import DriverForm
+from sqldiff.appdata import schemas
 
 
 class DriverModel(QtCore.QAbstractListModel):
-    def __init__(self, driver_manager: PersistenceManager, driver_type_manager: PersistenceManager, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super(DriverModel, self).__init__(*args, **kwargs)
-        self.driver_manager = driver_manager
-        self.driver_type_manager = driver_type_manager
-        self.db_icons = {dt.name: QtGui.QPixmap(str(dt.icon_file_path)).scaledToWidth(64) for dt in driver_type_manager}
+        self.drivers = get_drivers()
+        self.db_icons = {
+            d.driver_type.name: QtGui.QPixmap(str(d.driver_type.icon_file_path)).scaledToWidth(64) for d in self.drivers
+        }
 
     def data(self, index, role=None):
-        driver_name = self.driver_manager[index.row()].driver_type.name
+        driver_name = self.drivers[index.row()].name
+        driver_type_name = self.drivers[index.row()].driver_type.name
         driver_icon = self.db_icons[driver_name]
         if role == Qt.DisplayRole:
             return driver_name
@@ -25,21 +28,18 @@ class DriverModel(QtCore.QAbstractListModel):
             return driver_icon
 
     def rowCount(self, parent=None, *args, **kwargs):
-        return len(self.driver_manager)
+        return len(self.drivers)
 
 
 class DriverManager(QWidget, Ui_DriverManager):
-    def __init__(self, driver_manager, driver_type_manager, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.setupUi(self)
         #
         self.setWindowModality(QtCore.Qt.ApplicationModal)
         self.driver_from_window = None
-        # Setup driver managers
-        self.driver_manager = driver_manager
-        self.driver_type_manager = driver_type_manager
         # Setup list view
-        self.model = DriverModel(driver_manager, driver_type_manager)
+        self.model = DriverModel()
         self.listView.setModel(self.model)
         self.listView.selectionModel().currentChanged.connect(self.driver_list_view_selection_changed)
         self.current_selected_driver_on_view = None
@@ -55,7 +55,7 @@ class DriverManager(QWidget, Ui_DriverManager):
         pass
 
     def driver_list_view_selection_changed(self, indexes):
-        self.current_selected_driver_on_view = self.driver_manager[indexes.row()]
+        self.current_selected_driver_on_view = self.model.drivers[indexes.row()]
         if self.current_selected_driver_on_view.is_predefined:
             self.deleteButton.setEnabled(False)
         else:
@@ -68,8 +68,9 @@ class DriverManager(QWidget, Ui_DriverManager):
         indexes = self.listView.selectedIndexes()
         if indexes:
             index = indexes[0].row()
-            driver = self.driver_manager[index]
-            self.open_driver_form(driver)
+            driver = self.model.drivers[index]
+            driver_schema = schemas.BaseDriver.from_orm(driver)
+            self.open_driver_form(driver_schema)
 
     def delete_driver(self):
         pass
@@ -81,9 +82,7 @@ class DriverManager(QWidget, Ui_DriverManager):
         pass
 
     def open_driver_form(self, driver=None):
-        # TODO pass self for handling callback, setup contract
-        self.driver_from_window = DriverForm(self.driver_manager, self.driver_type_manager, driver,
-                                             callback=self.driver_form_callback)
+        self.driver_from_window = DriverForm(driver, callback=self.driver_form_callback)
         self.driver_from_window.show()
 
     def driver_form_callback(self, driver):
@@ -96,5 +95,3 @@ class DriverManager(QWidget, Ui_DriverManager):
         self.listView.clearSelection()
         # self.driver_from_window.close()
         # self.driver_from_window = None
-
-

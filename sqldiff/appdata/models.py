@@ -1,101 +1,62 @@
-from enum import Enum
-from typing import List, Pattern, Optional, Any
-from uuid import uuid4
+import uuid
 
-from pydantic import Field, FilePath, constr, UUID4, SecretStr
-from pydantic import BaseModel as PydanticBaseModel
-from pathlib import Path
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, UniqueConstraint
+from sqlalchemy.orm import relationship
 
+from sqldiff.appdata.dbconf import Base
 
-class BaseModel(PydanticBaseModel):
-    class Config:
-        arbitrary_types_allowed = True
+from sqlalchemy_utils import UUIDType
 
 
-################
-# CONNECTIONS
-################
+class DriverType(Base):
+    __tablename__ = "driver_types"
+    __table_args__ = (
+        UniqueConstraint('name',),
+    )
+    id = Column(UUIDType(binary=False), primary_key=True, default=uuid.uuid4)
+    name = Column(String)
+    icon_file_path = Column(String)
+    logo_file_path = Column(String)
+    # driver_id = Column(UUIDType(binary=False), ForeignKey('drivers.id'))
+
+    driver = relationship("Driver", back_populates="driver_type")
 
 
-class BaseConnection(BaseModel):
-    host: str = Field(..., title='Host', description='Target database host address.')
-    port: int = Field(..., title='Port', description='Database port')
-    username: str = Field(..., title='Username', description='User name')
-    password: SecretStr = Field(..., title='Password', description='TDatabase user password')
+class ExpectedDriverFile(Base):
+    __tablename__ = "expected_driver_files"
+    __table_args__ = (
+        UniqueConstraint('file_regex', 'driver_id'),
+    )
+    id = Column(UUIDType(binary=False), primary_key=True, default=uuid.uuid4)
+    file_regex = Column(String)
+    driver_id = Column(UUIDType(binary=False), ForeignKey('drivers.id'))
 
-    class Config:
-        json_encoders = {
-            SecretStr: lambda v: v.get_secret_value(),
-        }
-
-
-class SchemaConnection(BaseConnection):
-    schema_name: Optional[str] = Field(..., title='Schema', description='Schema used in connection')
+    driver = relationship("Driver", back_populates="expected_driver_files")
 
 
-class DatabaseConnection(BaseConnection):
-    database: Optional[str] = Field(..., title='Database', description='Database name to connect to')
+class DriverFile(Base):
+    __tablename__ = "driver_files"
+    __table_args__ = (
+        UniqueConstraint('file_path', 'driver_id'),
+    )
+    id = Column(UUIDType(binary=False), primary_key=True, default=uuid.uuid4)
+    file_path = Column(String)
+    driver_id = Column(UUIDType(binary=False), ForeignKey('drivers.id'))
+
+    driver = relationship("Driver", back_populates="driver_files")
 
 
-class GenericConnection(SchemaConnection, DatabaseConnection):
-    pass
+class Driver(Base):
+    __tablename__ = "drivers"
 
+    id = Column(UUIDType(binary=False), primary_key=True, default=uuid.uuid4)
+    name = Column(String, unique=True)
+    jdbc_class_name = Column(String)
+    url_template = Column(String)
+    default_port = Column(Integer)
+    is_predefined = Column(Boolean)
+    driver_type_id = Column(UUIDType(binary=False), ForeignKey('driver_types.id'))
 
-#################
-# DRIVERS
-#################
-
-class DriverType(BaseModel):
-    name: str = Field(..., title='Driver type name', description='Database driver type name.')
-    icon_file_path: Path = Field(..., description='Image file name of database icon in qt resources')
-    logo_file_path: Path = Field(..., description='Image file name of database logo in qt resources')
-
-
-class BaseDriver(BaseModel):
-    # Predefined values
-    id: UUID4 = Field(default_factory=uuid4)
-    driver_name: str = Field(..., title='Driver Name', description='Unique driver definition name.')
-    driver_type: DriverType = Field(..., title='Driver Type', description='Database driver type.')
-    jdbc_class_name: str = Field(..., title='JDBC class name',
-                                 description='JDBC class name in attached driver *.jar file.')
-    url_template: str = Field(..., title='JDBC URL template')
-    default_port: Optional[int] = Field(..., title='Port', description='Default database connection port.')
-    # will cause the input value to be passed to re.compile(v) to create a regex
-    expected_driver_files: List[Pattern] = Field(..., title='Expected driver files',
-                                                 description='List of expected file names regexp.')
-    is_predefined: bool = Field(default=True, title='Is Predefined', description='Is predefined by application')
-
-    driver_files: List[FilePath] = Field(..., title='List of paths to JDBC *.jar files')
-
-
-#################
-# PERSISTENCE
-#################
-
-class PersistenceModel(BaseModel):
-    """
-    Persistence Model is used to store multiple records of pydantic type defined in "data" field.
-    Additional metadata for persistence can be added.
-    """
-    # Custom Root Type. Overwrite root field in subclass.
-    data: List[PydanticBaseModel]
-
-    def __iter__(self):
-        return iter(self.data)
-
-    def __getitem__(self, item):
-        return self.data[item]
-
-    def __len__(self):
-        return len(self.data)
-
-    def append_r(self, item):
-        self.data.append(item)
-
-
-class DriverPersistence(PersistenceModel):
-    data: List[BaseDriver]
-
-
-class DriverTypePersistence(PersistenceModel):
-    data: List[DriverType]
+    expected_driver_files = relationship("ExpectedDriverFile", back_populates="driver")
+    driver_files = relationship("DriverFile", back_populates="driver")
+    driver_type = relationship("DriverType", back_populates="driver")
