@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui
 from PyQt5.QtWidgets import QWidget, QFileDialog, QStyle, QMessageBox
 
 from sqldiff.appdata import schemas
-from sqldiff.appdata.crud import get_driver_type_by_name, get_driver_types, upsert_driver
+from sqldiff.appdata.crud import get_driver_type_by_name, get_driver_types, upsert_driver, get_generic_driver_type
 from sqldiff.appdata.path import ResourcePaths
 
 from sqldiff.ui.designer.ui_driver_form import Ui_DriverForm
@@ -159,9 +159,10 @@ class DriverForm(QWidget, Ui_DriverForm):
             self.new_driver = False
         else:
             # Create new driver instance
+            driver_type = schemas.DriverType.from_orm(get_generic_driver_type())
             self.driver = schemas.BaseDriver.construct(
-                driver_name='NewDriver',
-                driver_type=generic_driver_type,
+                name='NewDriver',
+                driver_type=driver_type,
                 jdbc_class_name='',
                 url_template='',
                 default_port='',
@@ -283,18 +284,6 @@ class DriverForm(QWidget, Ui_DriverForm):
 
     def model_from_form(self):
         driver_files = self.driver.driver_files
-        # listview_paths = [i for i in self.model.data_records if i.type == PatternType.PATH]
-        # for p in listview_paths:
-        #     path = Path(p.pattern)
-        #     if not any(path in df.file_path for df in self.driver.driver_files):
-        #         driver_files.append(
-        #             schemas.DriverFile(
-        #                 file_path=Path(path),
-        #                 driver_id=self.driver.id
-        #             )
-        #         )
-        # [Path(i.pattern) for i in self.model.data_records if i.type == PatternType.PATH],
-        # get_driver_type_by_name
         form_dict = {
             'name': self.driverNameLineEdit.text(),
             'driver_type': self.get_driver_type_from_combobox(),

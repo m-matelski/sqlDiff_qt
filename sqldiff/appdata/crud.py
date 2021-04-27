@@ -1,6 +1,9 @@
 import re
 from pathlib import PosixPath
+from typing import List
 from uuid import UUID
+
+from sqlalchemy.exc import NoResultFound
 
 from sqldiff.appdata import models, schemas
 
@@ -33,21 +36,37 @@ def get_driver_type_by_name(name, db: Session = db):
     return db.query(models.DriverType).filter(models.DriverType.name == name).first()
 
 
+def get_generic_driver_type(db: Session = db):
+    return db.query(models.DriverType).filter(models.DriverType.name == 'Generic').one()
+
+
 def upsert_driver(driver: schemas.BaseDriver, db: Session = db):
-    d = driver.dict()
-    d = {
-        'id': UUID('225f4c14-1b87-4b23-abf1-59d15faee2b2'),
-        # 'driver_type': {'name': 'PostgreSQL', 'icon_file_path': PosixPath(':/resources_data/db_icon/postgres.png'),
-        #                 'logo_file_path': PosixPath(':/resources_data/db_logo/postgres.png')},
-        'jdbc_class_name': 'org.postgresql.Driver', 'url_template': 'jdbc:postgresql://{host}[:{port}]/[{database}]',
-        'default_port': '5432', 'is_predefined': True,
-        'expected_driver_files': [
-           {'id': UUID('7d5c9eee-ecfc-4bb2-9a2b-967b5fdf8f5f'), 'file_regex': re.compile('.*postgres.*.jar'),
-            'driver_id': UUID('225f4c14-1b87-4b23-abf1-59d15faee2b2')}],
-        # 'driver_files': [],
-        'name': 'PostgreSQL'}
-    # driver1 = models.Driver(
-    #     name =
-    # )
-    driver = models.Driver(**d)
-    a = 1
+    # TODO write tests for method
+    try:
+        driver_instance = db.query(models.Driver).filter(models.Driver.id == driver.id).one()
+    except NoResultFound:
+        driver_instance = models.Driver.create_from_schema(driver, schemas.DriverCreate)
+        driver_instance.driver_type = get_generic_driver_type(db)
+
+    # Add relations
+    # Add driver files relation from form. Delete (overwrite) previously defined driver files.
+    driver_files = [models.DriverFile.create_from_schema(driver_file, schemas.DriverFileCreate)
+                    for driver_file in driver.driver_files]
+    driver_instance.driver_files = driver_files
+
+    db.add(driver_instance)
+    db.commit()
+    db.refresh(driver_instance)
+    return driver_instance
+
+
+def delete_driver(driver: models.Driver, db: Session = db):
+    db.delete(driver)
+    db.commit()
+
+
+def delete_drivers(drivers: List[models.Driver], db: Session = db):
+    for driver in drivers:
+        delete_driver(driver)
+
+
