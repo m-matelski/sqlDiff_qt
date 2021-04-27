@@ -5,17 +5,18 @@ from appdirs import AppDirs
 app_dirs = AppDirs("SqlDiff", "")
 DEFAULT_FILE_MODE = 0o644
 
+
+
 APPLICATION_DATA_PATH = Path(app_dirs.user_data_dir) / 'data'
-DRIVERS_FILE_PATH = APPLICATION_DATA_PATH / 'drivers.json'
-DRIVER_TYPE_FILE_PATH = APPLICATION_DATA_PATH / 'driver_type.json'
+SQLITE_DATABASE_PATH = APPLICATION_DATA_PATH / "sql_app.db"
+DATABASE_URL = f"sqlite:///{SQLITE_DATABASE_PATH}"
+
 
 # Create application file tree
-DRIVERS_FILE_PATH.parent.mkdir(parents=True, exist_ok=True)
-DRIVERS_FILE_PATH.touch(exist_ok=True, mode=DEFAULT_FILE_MODE)
-DRIVER_TYPE_FILE_PATH.touch(exist_ok=True, mode=DEFAULT_FILE_MODE)
+APPLICATION_DATA_PATH.parent.mkdir(parents=True, exist_ok=True)
 
 
-class Resources:
+class ResourcePaths:
     PATH_DB_ICON = Path(":/resources_data/db_icon")
     DB_ICON_POSTGRES = PATH_DB_ICON / "postgres.png"
     DB_ICON_GENERIC = PATH_DB_ICON / "generic.png"
@@ -28,3 +29,5 @@ class Resources:
 
     PATH_ICON = Path(":/resources_data/app_icon")
     JAR_ICON = PATH_ICON / 'jar_icon.png'
+
+

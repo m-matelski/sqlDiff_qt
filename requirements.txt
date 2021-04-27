@@ -5,3 +5,6 @@ JayDeBeApi==1.2.3
 pydantic==1.8.1
 appdirs==1.2.0
 PyInstaller==3.4
+alembic==1.5.8
+SQLAlchemy==1.4.9
+SQLAlchemy-Utils==0.37.0

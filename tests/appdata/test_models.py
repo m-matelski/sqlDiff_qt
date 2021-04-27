@@ -1,6 +1,6 @@
 import unittest
 
-from sqldiff.appdata.models import BaseDriver, DriverType
+from sqldiff.appdata.schemas import BaseDriver, DriverType
 from sqldiff.appdata.url_template import JdbcUrlTemplate
 
 

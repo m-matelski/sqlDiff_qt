@@ -5,7 +5,7 @@ from sqldiff.ui.main_window import MainWindow
 # Load resources
 import ui.designer.resources_rc
 # Process initial data
-import appdata.initial
+import appdata.migration
 
 import sys
 
