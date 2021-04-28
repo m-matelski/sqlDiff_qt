@@ -39,6 +39,17 @@ jobs:
       run: |
         pyinstaller pyinstaller_base.spec
         
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v2
+      with:
+        version: '5.15.4'
+        host: 'linux'
+        target: 'desktop'
+        install-deps: 'true'
+        setup-python: 'false'
+        set-env: 'false'
+        tools-only: 'false'
+        
     - name: Dry run application build
       run: |
         ./dist/main/main
