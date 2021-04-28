@@ -47,7 +47,7 @@ jobs:
         target: 'desktop'
         install-deps: 'true'
         setup-python: 'false'
-        set-env: 'false'
+        set-env: 'true'
         tools-only: 'false'
         
     - name: Dry run application build
