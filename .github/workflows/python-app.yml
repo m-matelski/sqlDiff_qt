@@ -49,6 +49,9 @@ jobs:
         setup-python: 'false'
         set-env: 'true'
         tools-only: 'false'
+    - name: install libxcb
+      run: |
+        sudo apt install --reinstall libxcb-xinerama
         
     - name: Dry run application build
       run: |
