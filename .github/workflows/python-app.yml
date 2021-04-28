@@ -37,4 +37,7 @@ jobs:
         
     - name: Build with pyinstaller
       run: |
-        pyinstaller --clean main_sqldiff.spec
+        pyinstaller pyinstaller_base.spec
+        
+
+        
