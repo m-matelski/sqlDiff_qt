@@ -39,5 +39,9 @@ jobs:
       run: |
         pyinstaller pyinstaller_base.spec
         
+    - name: Dry run application build
+      run: |
+        ./dist/main/main
+        
 
         
