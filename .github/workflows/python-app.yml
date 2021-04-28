@@ -17,8 +17,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Install qt libs
-      run: |
-        sudo apt install libxcb-xinerama0 libqt5x11extras5 
+      run: | 
+        sudo apt install libxcb-xinerama0 libqt5x11extras5 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xkb1 libxkbcommon-x11-0
         
     - name: Link qt
       run: |
