@@ -34,3 +34,7 @@ jobs:
     - name: Test with pytest
       run: |
         pytest
+        
+    - name: Build with pyinstaller
+      run: |
+        pyinstaller --clean main_sqldiff.spec
