@@ -41,7 +41,7 @@ jobs:
         
     - name: Test application build dry run.
       run: |
-        ./dist/main/main --dry-run
+        sudo ./dist/main/main --dry-run
         
         
 
