@@ -61,7 +61,10 @@ jobs:
     
     - name: reinstall libs
       run: |
-        sudo apt-get install --reinstall libxcb-xinerama0 |
+        sudo apt-get install --reinstall libxcb-xinerama0
+        
+    - name: relink
+      run: |
         sudo ln -sf /usr/lib/x86_64-linux-gnu/qt5/plugins/platforms/ /usr/bin/
        
     - name: Dry run application build
