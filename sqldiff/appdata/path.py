@@ -5,15 +5,12 @@ from appdirs import AppDirs
 app_dirs = AppDirs("SqlDiff", "")
 DEFAULT_FILE_MODE = 0o644
 
-
-
 APPLICATION_DATA_PATH = Path(app_dirs.user_data_dir) / 'data'
 SQLITE_DATABASE_PATH = APPLICATION_DATA_PATH / "sql_app.db"
 DATABASE_URL = f"sqlite:///{SQLITE_DATABASE_PATH}"
 
-
 # Create application file tree
-APPLICATION_DATA_PATH.parent.mkdir(parents=True, exist_ok=True)
+APPLICATION_DATA_PATH.mkdir(parents=True, exist_ok=True)
 
 
 class ResourcePaths:
@@ -29,5 +26,3 @@ class ResourcePaths:
 
     PATH_ICON = Path(":/resources_data/app_icon")
     JAR_ICON = PATH_ICON / 'jar_icon.png'
-
-
