@@ -19,7 +19,7 @@ jobs:
     - name: Install qt libs
       run: |
         sudo apt update |
-        sudo apt install libxcb-xinerama0
+        sudo apt install libxcb-xinerama0 libqt5x11extras5
     
     - name: Set up Python 3.9
       uses: actions/setup-python@v2
@@ -55,6 +55,11 @@ jobs:
         set-env: 'true'
         tools-only: 'false'
         
+    
+    - name: reinstall libs
+      run: |
+        sudo apt-get install --reinstall libxcb-xinerama0
+       
     - name: Dry run application build
       run: |
         ./dist/main/main
