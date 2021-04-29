@@ -69,7 +69,7 @@ jobs:
        
     - name: Dry run application build
       run: |
-        ./dist/main/main
+        export QT_DEBUG_PLUGINS=1 && ./dist/main/main
         
 
         
