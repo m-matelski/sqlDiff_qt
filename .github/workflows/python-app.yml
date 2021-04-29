@@ -43,10 +43,6 @@ jobs:
       run: |
         pytest
         
-    - name: Build with pyinstaller
-      run: |
-        pyinstaller pyinstaller_base.spec
-        
     - name: Install Qt
       uses: jurplel/install-qt-action@v2
       with:
@@ -63,9 +59,15 @@ jobs:
       run: |
         sudo apt-get install --reinstall libxcb-xinerama0
         
-    - name: relink
+#     - name: relink
+#       run: |
+#         sudo ln -sf /usr/lib/x86_64-linux-gnu/qt5/plugins/platforms/ /usr/bin/
+        
+    - name: Build with pyinstaller
       run: |
-        sudo ln -sf /usr/lib/x86_64-linux-gnu/qt5/plugins/platforms/ /usr/bin/
+        pyinstaller pyinstaller_base.spec
+        
+
        
     - name: Dry run application build
       run: |
