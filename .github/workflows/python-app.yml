@@ -16,15 +16,18 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+        
     - name: Set up Python 3.9
       uses: actions/setup-python@v2
       with:
         python-version: 3.9
-    - name: Install dependencies
+        
+    - name: Install Python dependencies
       run: |
         python -m pip install --upgrade pip
         pip install flake8 pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
@@ -38,6 +41,11 @@ jobs:
     - name: Build with pyinstaller
       run: |
         pyinstaller pyinstaller_base.spec
+        
+    # See for QT_QPA_PLATFORM: https://github.com/therecipe/qt/issues/775
+    - name: Dry run application build
+      run: |
+        export QT_QPA_PLATFORM=offscreen && export QT_DEBUG_PLUGINS=1 && ./dist/main/main --dry-run
         
 
         
