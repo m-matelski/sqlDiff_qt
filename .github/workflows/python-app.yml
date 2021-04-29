@@ -16,23 +16,26 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    
     - name: Install qt libs
       run: | 
         sudo apt install libxcb-xinerama0 libqt5x11extras5 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-xkb1 libxkbcommon-x11-0
         
-    - name: Link qt
-      run: |
-        sudo ln -sf /usr/lib/x86_64-linux-gnu/qt5/plugins/platforms/ /usr/bin/
+#     - name: Link qt
+#       run: |
+#         sudo ln -sf /usr/lib/x86_64-linux-gnu/qt5/plugins/platforms/ /usr/bin/
     
     - name: Set up Python 3.9
       uses: actions/setup-python@v2
       with:
         python-version: 3.9
-    - name: Install dependencies
+        
+    - name: Install Python dependencies
       run: |
         python -m pip install --upgrade pip
         pip install flake8 pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
@@ -43,21 +46,18 @@ jobs:
       run: |
         pytest
         
-    - name: Install Qt
-      uses: jurplel/install-qt-action@v2
-      with:
-        version: '5.15.2'
-        host: 'linux'
-        target: 'desktop'
-        install-deps: 'true'
-        setup-python: 'false'
-        set-env: 'true'
-        tools-only: 'false'
+#     - name: Install Qt
+#       uses: jurplel/install-qt-action@v2
+#       with:
+#         version: '5.15.2'
+#         host: 'linux'
+#         target: 'desktop'
+#         install-deps: 'true'
+#         setup-python: 'false'
+#         set-env: 'true'
+#         tools-only: 'false'
         
     
-    - name: reinstall libs
-      run: |
-        sudo apt-get install --reinstall libxcb-xinerama0
         
 #     - name: relink
 #       run: |
