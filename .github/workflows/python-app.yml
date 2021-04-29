@@ -71,7 +71,7 @@ jobs:
        
     - name: Dry run application build
       run: |
-        export QT_DEBUG_PLUGINS=1 && ./dist/main/main
+        export QT_QPA_PLATFORM=offscreen && export QT_DEBUG_PLUGINS=1 && ./dist/main/main
         
 
         
