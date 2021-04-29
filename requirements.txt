@@ -1,5 +1,5 @@
-PyQt5==5.15.*
-PyQt5-stubs==5.15.*
+PyQt5==5.15.2
+PyQt5-stubs==5.15.2
 sqlparse==0.4.1
 JayDeBeApi==1.2.3
 pydantic==1.8.1
