@@ -10,6 +10,13 @@
     <file>resources_data/db_icon/postgres.png</file>
   </qresource>
   <qresource>
+    <file>resources_data/app_icon/database_add.svg</file>
+    <file>resources_data/app_icon/database.svg</file>
+    <file>resources_data/app_icon/database_drivers.svg</file>
+    <file>resources_data/app_icon/database_gear.svg</file>
+    <file>resources_data/app_icon/database_not_ok.svg</file>
+    <file>resources_data/app_icon/database_ok.svg</file>
+    <file>resources_data/app_icon/filter.svg</file>
     <file>resources_data/app_icon/jar_icon.png</file>
   </qresource>
 </RCC>

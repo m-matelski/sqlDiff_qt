@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DriverManager</class>
- <widget class="QWidget" name="DriverManager">
+ <class>GenericLisviewItemManager</class>
+ <widget class="QWidget" name="GenericLisviewItemManager">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -12,6 +12,10 @@
   </property>
   <property name="windowTitle">
    <string>Driver Manager</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="resources.qrc">
+    <normaloff>:/resources_data/app_icon/database_drivers.svg</normaloff>:/resources_data/app_icon/database_drivers.svg</iconset>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
@@ -78,13 +82,6 @@
       <widget class="QPushButton" name="okButton">
        <property name="text">
         <string>Ok</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="cancelButton">
-       <property name="text">
-        <string>Cancel</string>
        </property>
       </widget>
      </item>

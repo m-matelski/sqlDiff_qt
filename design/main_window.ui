@@ -43,6 +43,9 @@
      <string>Database</string>
     </property>
     <addaction name="actionDriverManager"/>
+    <addaction name="separator"/>
+    <addaction name="actionConnectionManager"/>
+    <addaction name="actionAddConnection"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -107,13 +110,48 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionDriverManager"/>
+   <addaction name="separator"/>
+   <addaction name="actionConnectionManager"/>
+   <addaction name="actionAddConnection"/>
+   <addaction name="separator"/>
   </widget>
   <action name="actionDriverManager">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/resources_data/app_icon/database_drivers.svg</normaloff>:/resources_data/app_icon/database_drivers.svg</iconset>
+   </property>
    <property name="text">
     <string>Driver Manager</string>
    </property>
   </action>
+  <action name="actionConnectionManager">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/resources_data/app_icon/database_gear.svg</normaloff>:/resources_data/app_icon/database_gear.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Connection Manager</string>
+   </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Manage database connection settings.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </action>
+  <action name="actionAddConnection">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/resources_data/app_icon/database_add.svg</normaloff>:/resources_data/app_icon/database_add.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Add Connection</string>
+   </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Add new database connection.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>
