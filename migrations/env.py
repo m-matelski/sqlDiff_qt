@@ -10,6 +10,8 @@ from alembic import context
 from sqldiff.appdata.dbconf import DATABASE_URL
 
 config = context.config
+print(f"env.py {config=}")
+print(f"env.py {config.config_file_name=}")
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.

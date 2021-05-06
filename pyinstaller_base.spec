@@ -16,7 +16,7 @@ print(f'{SQLDIFF=}')
 a = Analysis(['sqldiff/main.py', 'migrations/env.py'],
              pathex=[SPEC_ROOT, SQLDIFF, MIGRATIONS_PATH],
              binaries=[],
-             datas=[],
+             datas=[('alembic.ini', '.')],
              hiddenimports=[],
              hookspath=[],
              runtime_hooks=[],
@@ -26,7 +26,11 @@ a = Analysis(['sqldiff/main.py', 'migrations/env.py'],
              cipher=block_cipher,
              noarchive=False)
 
+# TODO exclude __pycache__
+# Add alebic migration directory with its content
 a.datas += Tree(MIGRATIONS_PATH, prefix=MIGRATIONS)
+
+print(f"{a.datas}")
 
 
 pyz = PYZ(a.pure, a.zipped_data,
