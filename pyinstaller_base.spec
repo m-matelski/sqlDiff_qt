@@ -7,13 +7,14 @@ block_cipher = None
 #Dynamically set paths
 SPEC_ROOT = os.path.abspath(SPECPATH)
 SQLDIFF = os.path.join(SPEC_ROOT, 'sqldiff')
-MIGRATIONS = os.path.join(SPEC_ROOT, 'migrations')
+MIGRATIONS = 'migrations'
+MIGRATIONS_PATH = os.path.join(SPEC_ROOT, MIGRATIONS)
 
 print(f'{SPEC_ROOT=}')
 print(f'{SQLDIFF=}')
 
 a = Analysis(['sqldiff/main.py', 'migrations/env.py'],
-             pathex=[SPEC_ROOT, SQLDIFF, MIGRATIONS],
+             pathex=[SPEC_ROOT, SQLDIFF, MIGRATIONS_PATH],
              binaries=[],
              datas=[],
              hiddenimports=[],
@@ -24,6 +25,10 @@ a = Analysis(['sqldiff/main.py', 'migrations/env.py'],
              win_private_assemblies=False,
              cipher=block_cipher,
              noarchive=False)
+
+a.datas += Tree(MIGRATIONS_PATH, prefix=MIGRATIONS)
+
+
 pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)
 
