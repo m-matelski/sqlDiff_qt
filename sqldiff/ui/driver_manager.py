@@ -55,6 +55,7 @@ class DriverListViewManagerWindow(GenericListviewManagerWindow):
 class DriverListViewManagerFactory(ListViewManagerFactoryMethod):
 
     def create_listview_manager_window(self) -> GenericListviewManagerWindow:
+        window_title = "Driver Manager"
         model = DriverModel()
         delete_item_method = delete_driver
         ItemFormClass = DriverForm
@@ -66,6 +67,7 @@ class DriverListViewManagerFactory(ListViewManagerFactoryMethod):
         )
 
         driver_listview_window = DriverListViewManagerWindow(
+            window_title=window_title,
             model=model,
             delete_item_method=delete_item_method,
             ItemFormClass=ItemFormClass,

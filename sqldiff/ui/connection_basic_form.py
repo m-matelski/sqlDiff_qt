@@ -95,7 +95,7 @@ class ConnectionBasicForm(QWidget, Ui_ConnectionBasicForm):
 
     def setup_form(self):
         self.labelDriverName.setText(
-            f"Driver: {self.connection.driver.name} [{self.connection.driver.driver_type.name} JDBC Driver]")
+            f"Driver: {self.connection_driver.name} [{self.connection_driver.driver_type.name} JDBC Driver]")
         if self.connection:
             self.load_form()
 

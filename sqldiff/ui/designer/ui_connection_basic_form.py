@@ -180,7 +180,7 @@ class Ui_ConnectionBasicForm(object):
 
     def retranslateUi(self, ConnectionBasicForm):
         _translate = QtCore.QCoreApplication.translate
-        ConnectionBasicForm.setWindowTitle(_translate("ConnectionBasicForm", "Driver"))
+        ConnectionBasicForm.setWindowTitle(_translate("ConnectionBasicForm", "Connection"))
         self.connectionGroupBox.setTitle(_translate("ConnectionBasicForm", "Connection"))
         self.nameLabel.setText(_translate("ConnectionBasicForm", "Name:"))
         self.serverGroupBox.setTitle(_translate("ConnectionBasicForm", "Server"))

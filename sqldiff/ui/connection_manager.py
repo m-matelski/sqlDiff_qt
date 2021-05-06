@@ -39,6 +39,7 @@ class ConnectionModel(QtCore.QAbstractListModel):
 
 class ConnectionListViewManagerWindow(GenericListviewManagerWindow):
     def __init__(self,
+                 window_title,
                  model: QtCore.QAbstractListModel,
                  delete_item_method,
                  ItemFormClass,
@@ -46,7 +47,8 @@ class ConnectionListViewManagerWindow(GenericListviewManagerWindow):
                  SchemaClass,
                  confirm_delete_item_messagebox: ConfirmMessageBoxProvider,
                  *args, **kwargs):
-        super().__init__(model,
+        super().__init__(window_title,
+                         model,
                          delete_item_method,
                          ItemFormClass,
                          SchemaClass,
@@ -73,6 +75,7 @@ class ConnectionListViewManagerWindow(GenericListviewManagerWindow):
 class ConnectionListViewManagerFactory(ListViewManagerFactoryMethod):
 
     def create_listview_manager_window(self) -> GenericListviewManagerWindow:
+        window_title = "Connection Manager"
         model = ConnectionModel()
         delete_item_method = delete_connection
         ItemFormClass = ConnectionBasicForm
@@ -85,6 +88,7 @@ class ConnectionListViewManagerFactory(ListViewManagerFactoryMethod):
         )
 
         connection_listview_window = ConnectionListViewManagerWindow(
+            window_title=window_title,
             model=model,
             delete_item_method=delete_item_method,
             ItemFormClass=ItemFormClass,

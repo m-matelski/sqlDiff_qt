@@ -36,6 +36,7 @@ class GenericListviewManagerWindow(QWidget, Ui_GenericLisviewItemManager, Select
     """
 
     def __init__(self,
+                 window_title,
                  model: QtCore.QAbstractListModel,
                  delete_item_method,
                  ItemFormClass,
@@ -47,6 +48,8 @@ class GenericListviewManagerWindow(QWidget, Ui_GenericLisviewItemManager, Select
         #
         self.setWindowModality(QtCore.Qt.ApplicationModal)
         self.item_form_window = None
+        self.setWindowTitle(window_title)
+
         # Setup list view
         self.model = model
         self.listView.setModel(self.model)
@@ -75,17 +78,6 @@ class GenericListviewManagerWindow(QWidget, Ui_GenericLisviewItemManager, Select
         self.modified = False
         # callback()
         self.close()
-
-    # def get_selected_item_index(self):
-    #     indexes = self.listView.selectedIndexes()
-    #     if indexes:
-    #         index = indexes[0].row()
-    #         return index
-    #
-    # def get_selected_item(self):
-    #     index = self.get_selected_item_index()
-    #     if index is not None:
-    #         return self.model.drivers[index]
 
     def new_item(self):
         self.open_item_form()
