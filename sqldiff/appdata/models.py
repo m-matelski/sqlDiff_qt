@@ -31,7 +31,6 @@ class DriverType(Base):
     name = Column(String)
     icon_file_path = Column(String)
     logo_file_path = Column(String)
-    # driver_id = Column(UUIDType(binary=False), ForeignKey('drivers.id'))
 
     driver = relationship("Driver", back_populates="driver_type")
 
@@ -57,7 +56,7 @@ class DriverFile(CreateFromSchemaMixin, Base):
     file_path = Column(String)
     driver_id = Column(UUIDType(binary=False), ForeignKey('drivers.id'))
 
-    driver = relationship("Driver", back_populates="driver_files", cascade="all,delete")
+    driver = relationship("Driver", back_populates="driver_files")
 
 
 class Driver(CreateFromSchemaMixin, Base):
@@ -74,4 +73,21 @@ class Driver(CreateFromSchemaMixin, Base):
     expected_driver_files = relationship("ExpectedDriverFile", back_populates="driver")
     driver_files = relationship("DriverFile", back_populates="driver")
     driver_type = relationship("DriverType", back_populates="driver")
+    connections = relationship("Connection", back_populates="driver")
+
+
+
+class Connection(CreateFromSchemaMixin, Base):
+    __tablename__ = "connections"
+
+    id = Column(UUIDType(binary=False), primary_key=True, default=uuid.uuid4)
+    name = Column(String, unique=True, nullable=False)
+    host = Column(String)
+    port = Column(Integer)
+    database = Column(String)
+    schema_name = Column(String)
+    username = Column(String)
+    password = Column(String)
+    driver_id = Column(UUIDType(binary=False), ForeignKey('drivers.id'))
+    driver = relationship("Driver", back_populates="connections")
 

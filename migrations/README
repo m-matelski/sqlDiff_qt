@@ -1,1 +1,13 @@
 Generic single-database configuration.
+
+Basic alembic commands:
+
+Create autogenerate revision
+alembic revision --autogenerate -m "message"
+
+Upgrade database to head version:
+alembic upgrade head
+
+Remove all migrations:
+alembic downgrade base
+

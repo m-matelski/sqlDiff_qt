@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file './design/driver_manager.ui'
+# Form implementation generated from reading ui file './design/generic_crud_listview_manager.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.4
 #
@@ -11,26 +11,29 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_DriverManager(object):
-    def setupUi(self, DriverManager):
-        DriverManager.setObjectName("DriverManager")
-        DriverManager.resize(739, 635)
-        self.verticalLayout_3 = QtWidgets.QVBoxLayout(DriverManager)
+class Ui_GenericLisviewItemManager(object):
+    def setupUi(self, GenericLisviewItemManager):
+        GenericLisviewItemManager.setObjectName("GenericLisviewItemManager")
+        GenericLisviewItemManager.resize(739, 635)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(":/resources_data/app_icon/database_drivers.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        GenericLisviewItemManager.setWindowIcon(icon)
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout(GenericLisviewItemManager)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.widgetHorizontalLayout = QtWidgets.QHBoxLayout()
         self.widgetHorizontalLayout.setObjectName("widgetHorizontalLayout")
-        self.listView = QtWidgets.QListView(DriverManager)
+        self.listView = QtWidgets.QListView(GenericLisviewItemManager)
         self.listView.setObjectName("listView")
         self.widgetHorizontalLayout.addWidget(self.listView)
         self.buttonsVerticalLayout = QtWidgets.QVBoxLayout()
         self.buttonsVerticalLayout.setObjectName("buttonsVerticalLayout")
-        self.newButton = QtWidgets.QPushButton(DriverManager)
+        self.newButton = QtWidgets.QPushButton(GenericLisviewItemManager)
         self.newButton.setObjectName("newButton")
         self.buttonsVerticalLayout.addWidget(self.newButton)
-        self.editButton = QtWidgets.QPushButton(DriverManager)
+        self.editButton = QtWidgets.QPushButton(GenericLisviewItemManager)
         self.editButton.setObjectName("editButton")
         self.buttonsVerticalLayout.addWidget(self.editButton)
-        self.deleteButton = QtWidgets.QPushButton(DriverManager)
+        self.deleteButton = QtWidgets.QPushButton(GenericLisviewItemManager)
         self.deleteButton.setObjectName("deleteButton")
         self.buttonsVerticalLayout.addWidget(self.deleteButton)
         spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
@@ -41,23 +44,19 @@ class Ui_DriverManager(object):
         self.bottomButtonsHorizontalLayout.setObjectName("bottomButtonsHorizontalLayout")
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.bottomButtonsHorizontalLayout.addItem(spacerItem1)
-        self.okButton = QtWidgets.QPushButton(DriverManager)
+        self.okButton = QtWidgets.QPushButton(GenericLisviewItemManager)
         self.okButton.setObjectName("okButton")
         self.bottomButtonsHorizontalLayout.addWidget(self.okButton)
-        self.cancelButton = QtWidgets.QPushButton(DriverManager)
-        self.cancelButton.setObjectName("cancelButton")
-        self.bottomButtonsHorizontalLayout.addWidget(self.cancelButton)
         self.verticalLayout_3.addLayout(self.bottomButtonsHorizontalLayout)
 
-        self.retranslateUi(DriverManager)
-        QtCore.QMetaObject.connectSlotsByName(DriverManager)
+        self.retranslateUi(GenericLisviewItemManager)
+        QtCore.QMetaObject.connectSlotsByName(GenericLisviewItemManager)
 
-    def retranslateUi(self, DriverManager):
+    def retranslateUi(self, GenericLisviewItemManager):
         _translate = QtCore.QCoreApplication.translate
-        DriverManager.setWindowTitle(_translate("DriverManager", "Driver Manager"))
-        self.newButton.setText(_translate("DriverManager", "New"))
-        self.editButton.setText(_translate("DriverManager", "Edit"))
-        self.deleteButton.setText(_translate("DriverManager", "Delete"))
-        self.okButton.setText(_translate("DriverManager", "Ok"))
-        self.cancelButton.setText(_translate("DriverManager", "Cancel"))
+        GenericLisviewItemManager.setWindowTitle(_translate("GenericLisviewItemManager", "Driver Manager"))
+        self.newButton.setText(_translate("GenericLisviewItemManager", "New"))
+        self.editButton.setText(_translate("GenericLisviewItemManager", "Edit"))
+        self.deleteButton.setText(_translate("GenericLisviewItemManager", "Delete"))
+        self.okButton.setText(_translate("GenericLisviewItemManager", "Ok"))
 from . import resources_rc

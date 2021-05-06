@@ -21,7 +21,7 @@ def get_db():
     return SessionLocal()
 
 
-db = get_db()
+db_session = get_db()
 
 # Create database if it does not exist.
 if not database_exists(engine.url):

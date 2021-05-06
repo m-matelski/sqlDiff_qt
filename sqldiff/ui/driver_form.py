@@ -4,18 +4,24 @@ from enum import Enum
 from functools import lru_cache, cached_property
 from pathlib import Path
 from typing import List
-from sqldiff.appdata import models, schemas
 
+from sqlalchemy.exc import IntegrityError
+
+from sqldiff.appdata import models, schemas
 
 from PyQt5 import QtCore, QtGui
 from PyQt5.QtWidgets import QWidget, QFileDialog, QStyle, QMessageBox
 
 from sqldiff.appdata import schemas
 from sqldiff.appdata.crud import get_driver_type_by_name, get_driver_types, upsert_driver, get_generic_driver_type
+from sqldiff.appdata.dbconf import db_session
 from sqldiff.appdata.path import ResourcePaths
 
 from sqldiff.ui.designer.ui_driver_form import Ui_DriverForm
 from PyQt5.QtCore import Qt
+
+from sqldiff.ui.messageboxes import SaveChangesMessageBoxProvider
+from sqldiff.ui.resources import DbIconsProvider
 
 generic_driver_type = 'Generic'
 
@@ -130,7 +136,8 @@ class PathModel(QtCore.QAbstractListModel):
             match = any([expected_file.file_regex.match(str(f)) for f in self.driver.driver_files])
             if not match:
                 expected_files.append(
-                    PathRecord(pattern=str(expected_file.file_regex), status=PathStatus.MISSING, type=PatternType.PATTERN))
+                    PathRecord(pattern=str(expected_file.file_regex), status=PathStatus.MISSING,
+                               type=PatternType.PATTERN))
 
         self.data_records = files + expected_files
         return self.data_records
@@ -173,6 +180,7 @@ class DriverForm(QWidget, Ui_DriverForm):
             self.new_driver = True
 
         self.callback = callback
+        self.db_icons_provider = DbIconsProvider()
 
         # Get db logo images
         self.db_logo = None
@@ -185,6 +193,8 @@ class DriverForm(QWidget, Ui_DriverForm):
         # Setup list view
         self.model = PathModel(self.driver, self.style())
         self.listView.setModel(self.model)
+
+
 
         # setup buttons
         self.addPathButton.clicked.connect(self.add_path)
@@ -240,18 +250,14 @@ class DriverForm(QWidget, Ui_DriverForm):
         except ValueError as e:
             QMessageBox.critical(self, "Invalid driver data.", str(e))
 
+        except IntegrityError as e:
+            db_session.rollback()
+            QMessageBox.critical(self, "Driver already exists.",
+                                 "Driver with provided name already exists. Please choose another name for driver.")
+
     def closeEvent(self, event: QtGui.QCloseEvent) -> None:
         if self.modified:
-            msg = QMessageBox(
-                icon=QMessageBox.Information,
-                text='Driver settings have been modified.',
-                parent=self,
-            )
-            msg.setWindowTitle('Changes detected.')
-            msg.setInformativeText('Do You want to discard changes and exit?')
-            msg.setStandardButtons(QMessageBox.Discard | QMessageBox.Cancel)
-            msg.setDefaultButton(QMessageBox.Cancel)
-            button = msg.exec_()
+            button = SaveChangesMessageBoxProvider(text='Driver settings have been modified.').build(self)
             if button == QMessageBox.Discard:
                 self.callback(None)
                 event.accept()
@@ -308,16 +314,15 @@ class DriverForm(QWidget, Ui_DriverForm):
         if self.driver is not None:
             self.driverTypeComboBox.setCurrentText(self.driver.driver_type.name)
         else:
-            self.driverTypeComboBox.setCurrentText('Generic JDBC Driver')
+            self.driverTypeComboBox.setCurrentText('Generic')
+        self.driverTypeComboBox.setEnabled(False)
 
     def setup_driver_logo(self):
 
-        logo_path = None
         if self.driver is not None:
-            logo_path = self.driver.driver_type.logo_file_path
+            self.db_logo = self.db_icons_provider.get_logo(self.driver.driver_type.name)
         else:
-            logo_path = ResourcePaths.DB_LOGO_GENERIC
-        self.db_logo = QtGui.QPixmap(str(logo_path))
+            self.db_logo = self.db_icons_provider.get_logo(ResourcePaths.DB_LOGO_GENERIC)
         self.labelDriverLogo.setPixmap(self.db_logo)
 
     def disable_components_for_predefined_driver(self):

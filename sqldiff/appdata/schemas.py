@@ -7,6 +7,11 @@ from pydantic import BaseModel as PydanticBaseModel
 from pathlib import Path
 
 
+# uuid_factory = uuid4
+def uuid_factory():
+    return uuid4
+
+
 class BaseModel(PydanticBaseModel):
     class Config:
         arbitrary_types_allowed = True
@@ -17,7 +22,7 @@ class BaseModel(PydanticBaseModel):
 #################
 
 class DriverType(BaseModel):
-    id: UUID4 = Field(default_factory=uuid4)
+    id: UUID4 = Field(default_factory=uuid_factory)
     name: str = Field(..., title='Driver type name', description='Database driver type name.')
     icon_file_path: Path = Field(..., description='Image file name of database icon in qt resources')
     logo_file_path: Path = Field(..., description='Image file name of database logo in qt resources')
@@ -27,7 +32,7 @@ class DriverType(BaseModel):
 
 
 class ExpectedDriverFile(BaseModel):
-    id: UUID4 = Field(default_factory=uuid4)
+    id: UUID4 = Field(default_factory=uuid_factory)
     file_regex: Pattern = Field(..., title='Expected driver files',
                                 description='expected file name regexp.')
     driver_id: UUID4
@@ -43,7 +48,6 @@ class DriverFileCreate(BaseModel):
         json_encoders = {
             FilePath: lambda v: str(v),
         }
-
 
 
 class DriverFile(DriverFileCreate):
@@ -65,7 +69,7 @@ class DriverCreate(BaseModel):
 
 class BaseDriver(DriverCreate):
     # Predefined values
-    id: UUID4 = Field(default_factory=uuid4)
+    id: UUID4 = Field(default_factory=uuid_factory)
 
     driver_type: DriverType = Field(..., title='Driver Type', description='Database driver type.')
     # will cause the input value to be passed to re.compile(v) to create a regex
@@ -81,16 +85,24 @@ class BaseDriver(DriverCreate):
 # CONNECTIONS
 ################
 
-
-class BaseConnection(BaseModel):
+class ConnectionCreate(BaseModel):
+    name: str = Field(..., title='Connection Name', description='Unique connection name.')
     host: str = Field(..., title='Host', description='Target database host address.')
     port: int = Field(..., title='Port', description='Database port')
-    username: str = Field(..., title='Username', description='User name')
-    password: SecretStr = Field(..., title='Password', description='TDatabase user password')
-    schema_name: Optional[str] = Field(..., title='Schema', description='Schema used in connection')
     database: Optional[str] = Field(..., title='Database', description='Database name to connect to')
+    schema_name: Optional[str] = Field(..., title='Schema', description='Schema used in connection')
+    username: str = Field(..., title='Username', description='User name')
+    password: Optional[SecretStr] = Field(..., title='Password', description='Database user password')
 
     class Config:
         json_encoders = {
             SecretStr: lambda v: v.get_secret_value(),
         }
+
+
+class Connection(ConnectionCreate):
+    id: UUID4 = Field(default_factory=uuid_factory)
+    driver: BaseDriver = Field(..., title='Connection driver.')
+
+    class Config:
+        orm_mode = True
