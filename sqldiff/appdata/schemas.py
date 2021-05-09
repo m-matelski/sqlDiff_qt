@@ -7,11 +7,6 @@ from pydantic import BaseModel as PydanticBaseModel
 from pathlib import Path
 
 
-# uuid_factory = uuid4
-def uuid_factory():
-    return uuid4
-
-
 class BaseModel(PydanticBaseModel):
     class Config:
         arbitrary_types_allowed = True
@@ -22,7 +17,7 @@ class BaseModel(PydanticBaseModel):
 #################
 
 class DriverType(BaseModel):
-    id: UUID4 = Field(default_factory=uuid_factory)
+    id: UUID4 = Field(default_factory=uuid4)
     name: str = Field(..., title='Driver type name', description='Database driver type name.')
     icon_file_path: Path = Field(..., description='Image file name of database icon in qt resources')
     logo_file_path: Path = Field(..., description='Image file name of database logo in qt resources')
@@ -32,7 +27,7 @@ class DriverType(BaseModel):
 
 
 class ExpectedDriverFile(BaseModel):
-    id: UUID4 = Field(default_factory=uuid_factory)
+    id: UUID4 = Field(default_factory=uuid4)
     file_regex: Pattern = Field(..., title='Expected driver files',
                                 description='expected file name regexp.')
     driver_id: UUID4
@@ -69,7 +64,7 @@ class DriverCreate(BaseModel):
 
 class BaseDriver(DriverCreate):
     # Predefined values
-    id: UUID4 = Field(default_factory=uuid_factory)
+    id: UUID4 = Field(default_factory=uuid4)
 
     driver_type: DriverType = Field(..., title='Driver Type', description='Database driver type.')
     # will cause the input value to be passed to re.compile(v) to create a regex
@@ -101,7 +96,7 @@ class ConnectionCreate(BaseModel):
 
 
 class Connection(ConnectionCreate):
-    id: UUID4 = Field(default_factory=uuid_factory)
+    id: UUID4 = Field(default_factory=uuid4)
     driver: BaseDriver = Field(..., title='Connection driver.')
 
     class Config:
