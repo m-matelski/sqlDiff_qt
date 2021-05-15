@@ -1,7 +1,7 @@
 PyQt5==5.15.2
 PyQt5-stubs==5.15.2
 sqlparse==0.4.1
-JayDeBeApi==1.2.3
+git+git://github.com/m-matelski/jaydebeapi.git #JayDeBeApi fork
 pydantic==1.8.1
 appdirs==1.2.0
 alembic==1.5.8
