@@ -55,4 +55,12 @@ class TestJdbcUrlTemplate(unittest.TestCase):
         self.assertEqual(url, 'jdbc:postgresql://test_host:1234/db=test_db')
 
 
+    def test_postgres_url_template(self):
+        template = 'jdbc:postgresql://{host}:[{port}]/[{database}]'
+        url_template = JdbcUrlTemplate(template)
+        args = {'host': 'test_host', 'port': 1234, 'database': 'test_db'}
+        url = url_template.feed(args)
+        self.assertEqual(url, 'jdbc:postgresql://test_host:1234/test_db')
+
+
 
