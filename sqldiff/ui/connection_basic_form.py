@@ -9,6 +9,7 @@ from sqlalchemy.exc import IntegrityError
 from sqldiff.appdata import schemas
 from sqldiff.appdata.crud import upsert_connection, get_connection_by_name
 from sqldiff.appdata.dbconf import db_session
+from sqldiff.db.connection import ConnectionApp
 from sqldiff.ui.designer.ui_connection_basic_form import Ui_ConnectionBasicForm
 from PyQt5 import QtCore, QtGui
 
@@ -64,10 +65,18 @@ class ConnectionBasicForm(QWidget, Ui_ConnectionBasicForm):
     def test_connection(self):
         try:
             self.read_form()
+            self.connection.password = self.passwordLineEdit.text()
+            connection = ConnectionApp(self.connection)
+            connection.close()
             print(f'test_connection using:{self.connection}')
         except ValidationError as e:
             QMessageBox.critical(self, "Invalid connection data.", str(e))
             return
+        except Exception as e:
+            QMessageBox.critical(self, "Error while connecting.", str(e))
+            return
+        QMessageBox.information(self, "Success!", "Connected successfully!")
+
 
     def closeEvent(self, event: QtGui.QCloseEvent) -> None:
         if self.modified:
@@ -121,6 +130,7 @@ class ConnectionBasicForm(QWidget, Ui_ConnectionBasicForm):
         if self.savePasswordCheckBox.checkState():
             return self.passwordLineEdit.text()
         return None
+
 
     def read_form(self):
         connection = schemas.Connection(
