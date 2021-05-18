@@ -1,14 +1,12 @@
 import re
 from collections import namedtuple
 from enum import Enum
-from typing import List
 
 import sqlparse
-from PyQt5.QtCore import QRegularExpression
-from PyQt5.QtGui import QSyntaxHighlighter, QColor, QTextCharFormat, QFont, QTextCursor
+from PyQt5.QtGui import QSyntaxHighlighter, QColor, QTextCharFormat, QFont
 
-from sqldiff.sql.functions import ANSI_FUNCTIONS
-from sqldiff.sql.keywords import SQL_2016_STANDARD_KEYWORDS
+from sqldiff.sql.syntax.functions import ANSI_FUNCTIONS
+from sqldiff.sql.syntax.keywords import SQL_2016_STANDARD_KEYWORDS
 
 SyntaxHighlighter = QSyntaxHighlighter
 
