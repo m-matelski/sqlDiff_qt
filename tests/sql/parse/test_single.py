@@ -1,14 +1,11 @@
 import os
 import unittest
-from timeit import timeit
 
 import sqlparse
 
-from sqldiff.sql.parse.compound import _split_no_strip, _get_queries_positions
-from sqldiff.sql.parse.single import _sub_strip_comments_before_statement, _sub_strip, _sub_strip, \
+from sqldiff.sql.parse.single import _sub_strip, \
     _sub_strip_comments_before_statement
-from sqldiff.ui.widgets.syntax_highlighter import extract_sql_syntax_highlighting_recursive_idx, \
-    extract_sql_syntax_highlighting
+from sqldiff.ui.widgets.editor.syntax_highlighter import extract_sql_syntax_highlighting_recursive_idx
 
 TEST_DATA_FILEPATH = os.path.join(os.path.dirname(__file__), 'test_queries/multiple_generic.sql')
 TEST_DATA_BIG_FILEPATH = os.path.join(os.path.dirname(__file__), 'test_queries/multiple_generic_big.sql')

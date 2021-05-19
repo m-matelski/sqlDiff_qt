@@ -132,50 +132,6 @@ class HighlightingRule:
         self.pattern_format = pattern_format
 
 
-class GenericKeywordSqlHighlighter(SyntaxHighlighter):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # default formatting
-        self.keyword_format = keyword_format
-        self.function_format = function_format
-        self.string_literal_format = string_literal_format
-        self.number_format = number_format
-        self.comment_format = comment_format
-        self.function_format = function_format
-        #
-        self.highlighting_rules = []
-
-        for keyword in SQL_2016_STANDARD_KEYWORDS:
-            keyword_regexp = f'\\b{re.escape(keyword)}\\b'
-            pattern = re.compile(keyword_regexp, re.IGNORECASE)
-            self.highlighting_rules.append(HighlightingRule(pattern, self.keyword_format))
-
-        for func in ANSI_FUNCTIONS:
-            pattern = re.compile(re.escape(func), re.IGNORECASE)
-            self.highlighting_rules.append(HighlightingRule(pattern, self.function_format))
-
-        string_literal_pattern = re.compile("\'.*\'")
-        self.highlighting_rules.append(HighlightingRule(string_literal_pattern, self.string_literal_format))
-
-        single_comment_pattern = re.compile("--[^\n]*")
-        self.highlighting_rules.append(HighlightingRule(single_comment_pattern, self.comment_format))
-
-        self.comment_start_pattern = re.compile("/\\*")
-        self.comment_end_pattern = re.compile("\\*/")
-
-    def highlightBlock(self, text):
-        # for rule in self.highlighting_rules:
-        #     match_iterator = rule.pattern.globalMatch(text)
-        #     while match_iterator.hasNext():
-        #         match = match_iterator.next()
-        #         print(f'match: start {match.capturedStart()} length {match.capturedLength()}')
-        #         self.setFormat(match.capturedStart(), match.capturedLength(), rule.pattern_format)
-
-        # pythonic way
-        for rule in self.highlighting_rules:
-            for match in re.finditer(rule.pattern, text):
-                self.setFormat(match.start(), match.end() - match.start(), rule.pattern_format)
-
 
 class GenericSqlHighlighter(SyntaxHighlighter):
     class BlockCommentState:
@@ -210,8 +166,7 @@ class GenericSqlHighlighter(SyntaxHighlighter):
         # self.highlighting_rules.append(HighlightingRule(single_comment_pattern, self.comment_format))
 
         self.comment_start_pattern = re.compile(re.escape("/*"))
-        # self.comment_end_pattern = re.compile(re.escape("*/"))
-        self.comment_end_pattern = re.compile("\\*/")
+        self.comment_end_pattern = re.compile(re.escape("*/"))
 
     def highlight_keywords(self, text):
         for rule in self.highlighting_rules:
@@ -246,6 +201,7 @@ class GenericSqlHighlighter(SyntaxHighlighter):
             start_index = match.start() if match else -1
 
     def highlightBlock(self, text):
-        self.highlight_keywords(text)
+        pass
+        # self.highlight_keywords(text)
         self.highlight_parsed_items(text)
         self.highlight_block_comment(text)

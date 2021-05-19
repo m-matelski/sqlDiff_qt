@@ -1,26 +1,26 @@
 from PyQt5 import QtGui
-from PyQt5.QtCore import QSize, QRect, Qt, QPoint
-from PyQt5.QtGui import QColor, QTextFormat, QPaintEvent, QPainter, QTextBlock, QSyntaxHighlighter, QTextCursor, \
-    QTextCharFormat
+from PyQt5.QtCore import QSize, QRect, Qt
+from PyQt5.QtGui import QColor, QTextFormat, QPaintEvent, QPainter, QTextCharFormat
 from PyQt5.QtWidgets import QTextEdit, QPlainTextEdit, QWidget, QVBoxLayout
 
-from sqldiff.sql.parse.compound import get_queries_to_highlight
-from sqldiff.ui.widgets.syntax_highlighter import GenericSqlParserHighlighter, GenericKeywordSqlHighlighter, \
-    GenericSqlHighlighter
+from sqldiff.ui.widgets.editor.area_highlighter import SqlStatementsBackgroundHighlighterRanged, \
+    TextEditorCurrentLineFormatter, \
+    SqlStatementsBackgroundHighlighter, CompositeEditorHighlighter
+from sqldiff.ui.widgets.editor.syntax_highlighter import GenericSqlHighlighter
 
 
 class CodeTextEdit(QPlainTextEdit):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        self.current_line_format = QTextCharFormat()
+
         self.lineNumberArea = LineNumberArea(self)
 
         self.blockCountChanged.connect(self.update_line_number_area_width)
         self.updateRequest.connect(self.update_line_number_area)
-        self.cursorPositionChanged.connect(self.highlight_current_line)
 
         self.update_line_number_area_width(0)
-        self.highlight_current_line()
 
         doc = self.document()
         font = doc.defaultFont()
@@ -53,20 +53,6 @@ class CodeTextEdit(QPlainTextEdit):
         super().resizeEvent(e)
         cr = self.contentsRect()
         self.lineNumberArea.setGeometry(QRect(cr.left(), cr.top(), self.line_number_area_width(), cr.height()))
-
-    def highlight_current_line(self):
-        extra_selections = list()
-
-        if not self.isReadOnly():
-            line_color = QColor(150, 200, 250, 50)
-            selection = QTextEdit.ExtraSelection()
-            selection.format.setBackground(line_color)
-            selection.format.setProperty(QTextFormat.FullWidthSelection, True)
-            selection.cursor = self.textCursor()
-            # selection.cursor.clearSelection()
-            extra_selections.append(selection)
-
-        self.setExtraSelections(extra_selections)
 
     def line_number_area_paint_event(self, event: QPaintEvent):
         painter = QPainter(self.lineNumberArea)
@@ -101,58 +87,12 @@ class LineNumberArea(QWidget):
         self.editor.line_number_area_paint_event(event)
 
 
-class TextEditorAreaFormatter:
-    def __init__(self, editor):
-        self.editor = editor
-
-    def format_area(self, start_pos, end_pos, area_format):
-        extra_selections = self.editor.extraSelections()
-        selection = QTextEdit.ExtraSelection()
-        selection.format = area_format
-        selection.cursor = self.editor.textCursor()
-        selection.cursor.setPosition(start_pos)
-        selection.cursor.setPosition(end_pos, QTextCursor.KeepAnchor)
-        extra_selections.append(selection)
-        self.editor.setExtraSelections(extra_selections)
-
-
-class SqlBackgroundHighlighter:
-    def __init__(self, editor):
-        self.editor = editor
-        self.color = QColor(130, 130, 225, 30)
-        self.format = QTextCharFormat()
-        self.format.setBackground(self.color)
-        self.area_highlighter = TextEditorAreaFormatter(editor)
-
-    def get_document_viewport_range(self):
-        cursor = self.editor.cursorForPosition(QPoint(0, 0))
-        start_pos = cursor.position()
-        bottom_right = QPoint(self.editor.viewport().width(), self.editor.viewport().height())
-        end_pos = self.editor.cursorForPosition(bottom_right).position()
-        return range(start_pos, end_pos)
-
-    def highlight(self):
-        plain_text = self.editor.document().toPlainText()
-        queries_positions = get_queries_to_highlight(plain_text, self.get_document_viewport_range())
-        # TODO: some colors depends on sql type (SELECT / INSERT / DELETE etc)
-        for query, query_range in queries_positions:
-            self.area_highlighter.format_area(query_range.start, query_range.stop, self.format)
-
-
 class SqlTextEdit(CodeTextEdit):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.sql_background_highlighter = SqlBackgroundHighlighter(self)
-
-        # self.syntax_highlighter = GenericSqlParserHighlighter(self.document())
         self.syntax_highlighter = GenericSqlHighlighter(self.document())
-        # self.syntax_highlighter = GenericSqlHighlighter(self.document())
 
-        self.cursorPositionChanged.connect(self.highlight_sql_statements)
-
-    def highlight_sql_statements(self):
-        # self.sql_background_highlighter.highlight()
-        pass
+        self.composite_highlighter = CompositeEditorHighlighter(self)
 
 
 class SqlEditorWidget(QWidget):
