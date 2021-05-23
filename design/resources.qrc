@@ -10,6 +10,7 @@
     <file>resources_data/db_icon/postgres.png</file>
   </qresource>
   <qresource>
+    <file>resources_data/app_icon/sql_new.svg</file>
     <file>resources_data/app_icon/database_add.svg</file>
     <file>resources_data/app_icon/database.svg</file>
     <file>resources_data/app_icon/database_drivers.svg</file>

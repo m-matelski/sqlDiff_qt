@@ -105,7 +105,6 @@ def upsert_driver(driver: schemas.BaseDriver, db: Session = db_session):
         return insert_driver(driver, db)
 
 
-
 def delete_driver(driver: models.Driver, db: Session = db_session):
     db.delete(driver)
     db.commit()
@@ -117,6 +116,10 @@ def get_connections(db: Session = db_session):
 
 def get_connection_by_name(name, db: Session = db_session):
     return db.query(models.Connection).filter(models.Connection.name == name).first()
+
+
+def get_connection_by_id(id, db: Session = db_session):
+    return db.query(models.Connection).filter(models.Connection.id == id).one()
 
 
 def delete_connection(connection: models.Connection, db: Session = db_session):
@@ -155,4 +158,3 @@ def upsert_connection(connection: schemas.Connection, db: Session = db_session):
         return update_connection(connection, db)
     else:
         return insert_connection(connection, db)
-

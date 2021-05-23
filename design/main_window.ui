@@ -17,7 +17,39 @@
    <double>1.000000000000000</double>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout_2"/>
+   <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <item>
+     <widget class="QFrame" name="frame">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QTabWidget" name="sqlEditorTabWidget">
+         <property name="currentIndex">
+          <number>-1</number>
+         </property>
+         <property name="elideMode">
+          <enum>Qt::ElideRight</enum>
+         </property>
+         <property name="documentMode">
+          <bool>true</bool>
+         </property>
+         <property name="tabsClosable">
+          <bool>true</bool>
+         </property>
+         <property name="movable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -47,59 +79,18 @@
     <addaction name="actionConnectionManager"/>
     <addaction name="actionAddConnection"/>
    </widget>
+   <widget class="QMenu" name="menuSQLEditor">
+    <property name="title">
+     <string>SQL Editor</string>
+    </property>
+    <addaction name="actionNewSqlEditor"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuDatabase"/>
+   <addaction name="menuSQLEditor"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <widget class="QDockWidget" name="dockWidget_2">
-   <attribute name="dockWidgetArea">
-    <number>4</number>
-   </attribute>
-   <widget class="QWidget" name="dockWidgetContents_2">
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QTextEdit" name="textEdit"/>
-     </item>
-    </layout>
-   </widget>
-  </widget>
-  <widget class="QDockWidget" name="dockWidget_3">
-   <attribute name="dockWidgetArea">
-    <number>4</number>
-   </attribute>
-   <widget class="QWidget" name="dockWidgetContents_3">
-    <layout class="QHBoxLayout" name="horizontalLayout_4">
-     <item>
-      <widget class="QTabWidget" name="tabWidget">
-       <property name="currentIndex">
-        <number>0</number>
-       </property>
-       <widget class="QWidget" name="tab">
-        <attribute name="title">
-         <string>Tab 1</string>
-        </attribute>
-        <layout class="QHBoxLayout" name="horizontalLayout_5">
-         <item>
-          <widget class="QTextEdit" name="textEdit_2"/>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="tab_2">
-        <attribute name="title">
-         <string>Tab 2</string>
-        </attribute>
-        <layout class="QHBoxLayout" name="horizontalLayout_6">
-         <item>
-          <widget class="QTextEdit" name="textEdit_3"/>
-         </item>
-        </layout>
-       </widget>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-  </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="windowTitle">
     <string>toolBar</string>
@@ -115,6 +106,7 @@
    <addaction name="actionConnectionManager"/>
    <addaction name="actionAddConnection"/>
    <addaction name="separator"/>
+   <addaction name="actionNewSqlEditor"/>
   </widget>
   <action name="actionDriverManager">
    <property name="icon">
@@ -147,6 +139,18 @@
    </property>
    <property name="toolTip">
     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Add new database connection.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </action>
+  <action name="actionNewSqlEditor">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/resources_data/app_icon/sql_new.svg</normaloff>:/resources_data/app_icon/sql_new.svg</iconset>
+   </property>
+   <property name="text">
+    <string>New SQL Editor</string>
+   </property>
+   <property name="toolTip">
+    <string>Creates new SQL editor</string>
    </property>
   </action>
  </widget>
