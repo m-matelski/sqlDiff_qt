@@ -5,7 +5,7 @@ import sqlparse
 
 from sqldiff.sql.parse.single import _sub_strip, \
     _sub_strip_comments_before_statement
-from sqldiff.ui.widgets.editor.syntax_highlighter import extract_sql_syntax_highlighting_recursive_idx
+from sqldiff.sql.parse.highlighting import _extract_sql_syntax_highlighting_recursive_idx
 
 TEST_DATA_FILEPATH = os.path.join(os.path.dirname(__file__), 'test_queries/multiple_generic.sql')
 TEST_DATA_BIG_FILEPATH = os.path.join(os.path.dirname(__file__), 'test_queries/multiple_generic_big.sql')
@@ -98,7 +98,7 @@ class TestSubSqlParsers(unittest.TestCase):
                     "on e.department_id = d.department_id\n"
                     "group by d.department_name;  \n  ")
         parsed = sqlparse.parse(test_sql)
-        tags = list(extract_sql_syntax_highlighting_recursive_idx(parsed, 0))
+        tags = list(_extract_sql_syntax_highlighting_recursive_idx(parsed, 0))
 
         # check all positions
         for tag in tags:
@@ -119,7 +119,7 @@ class TestSubSqlParsers(unittest.TestCase):
                     ");")
 
         parsed = sqlparse.parse(test_sql)
-        tags = list(extract_sql_syntax_highlighting_recursive_idx(parsed, 0))
+        tags = list(_extract_sql_syntax_highlighting_recursive_idx(parsed, 0))
 
         # check all positions
         for tag in tags:

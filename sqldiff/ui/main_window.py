@@ -5,6 +5,7 @@ from sqldiff.ui.connection_manager import ConnectionListViewManagerFactory
 from sqldiff.ui.designer.ui_main_window import Ui_MainWindow
 # from sqldiff.ui.driver_manager import DriverManager
 from sqldiff.ui.driver_manager import DriverListViewManagerFactory
+from sqldiff.ui.widgets.editor.factory import BaseSqlEditorFactory
 from sqldiff.ui.widgets.editor.sql_editor import SqlEditorWidget
 
 
@@ -34,7 +35,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.connection_manager_window.show()
 
     def create_new_sql_editor(self):
-        editor = SqlEditorWidget()
+        editor = BaseSqlEditorFactory().create_editor()
         icon = QtGui.QIcon(':/resources_data/app_icon/sql_new.svg')
         self.sqlEditorTabWidget.addTab(editor, icon, 'labl1')
 

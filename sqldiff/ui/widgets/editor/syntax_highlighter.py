@@ -1,33 +1,22 @@
 import re
-from collections import namedtuple
-from enum import Enum
 
 import sqlparse
 from PyQt5.QtGui import QSyntaxHighlighter, QColor, QTextCharFormat, QFont
 
-from sqldiff.sql.syntax.functions import ANSI_FUNCTIONS
-from sqldiff.sql.syntax.keywords import SQL_2016_STANDARD_KEYWORDS
+from sqldiff.sql.parse.highlighting import TokenHighlightTypeTag, extract_sql_syntax_highlighting
+
+"""
+Syntax highlighters for QPlainTextEdit components.
+
+QSyntaxHighlighter class allows to overwrite highlightBlock method to handle formatting for changed text.
+This method provides text parameter with only portion of text from text editor 
+which have been changed and needs to define it's syntax highlighting.
+
+"""
 
 SyntaxHighlighter = QSyntaxHighlighter
 
-
-class TokenHighlightTypeTag(Enum):
-    KEYWORD = 'KEYWORD'
-    STRING_LITERAL = 'STRING_LITERAL'
-    TEXT = 'TEXT'
-    NUMBER = 'NUMBER'
-    COMMENT = 'COMMENT'
-    FUNCTION = 'FUNCTION'
-
-
-TokenHighlightTagNamedTuple = namedtuple('TokenHighlightTag', 'tag token start_pos end_pos')
-
-
-class TokenHighlightTag(TokenHighlightTagNamedTuple):
-    def __repr__(self):
-        return f'<{self.tag}>: "{str(self.token)}" ({self.start_pos}, {self.end_pos})'
-
-
+# Default highlight formatting
 text_format = QTextCharFormat()
 
 keyword_format = QTextCharFormat()
@@ -57,83 +46,12 @@ tag_format = {
 }
 
 
-def extract_sql_syntax_highlighting_recursive_idx(tokens, idx):
-    """
-    Returns tagged tokens with tag related to syntax highlighting.
-    Every tag is returned with its position (start, end) in parsed query string.
-    :param tokens:
-    :return: Tuples (tag, token)
-    """
-    # Type error
-    try:
-        current_len = 0
-        for token in tokens:
-            token_len = len(str(token))
-            start_pos = idx + current_len
-            end_pos = idx + current_len + token_len
-            # Keywords
-            if token.ttype is sqlparse.tokens.Keyword or token.ttype is sqlparse.tokens.DML:
-                yield TokenHighlightTag(TokenHighlightTypeTag.KEYWORD, token, start_pos, end_pos)
-            # Numbers
-            elif hasattr(token.ttype, 'parent') and token.ttype.parent is sqlparse.tokens.Literal.Number:
-                yield TokenHighlightTag(TokenHighlightTypeTag.NUMBER, token, start_pos, end_pos)
-            # Single quotes strings
-            elif token.ttype is sqlparse.tokens.Literal.String.Single:
-                yield TokenHighlightTag(TokenHighlightTypeTag.STRING_LITERAL, token, start_pos, end_pos)
-            # Comment
-            elif hasattr(token.ttype, 'parent') and token.ttype.parent is sqlparse.tokens.Comment:
-                yield TokenHighlightTag(TokenHighlightTypeTag.COMMENT, token, start_pos, end_pos)
-            # Function
-            elif isinstance(token, sqlparse.sql.Function):
-                func_current_len = len(str(token.tokens[0]))
-                # return function Identifier token
-                yield TokenHighlightTag(
-                    TokenHighlightTypeTag.FUNCTION, token.tokens[0], start_pos, start_pos + func_current_len)
-                # and analyze function params with parenthesis
-                yield from extract_sql_syntax_highlighting_recursive_idx(token.tokens[1:], start_pos + func_current_len)
-            # No children, return token as plain text, end recursion
-            elif not hasattr(token, 'tokens'):
-                yield TokenHighlightTag(TokenHighlightTypeTag.TEXT, token, start_pos, end_pos)
-            # Recursive search of children kens
-            else:
-                yield from extract_sql_syntax_highlighting_recursive_idx(token.tokens, idx + current_len)
-            current_len += token_len
-    except TypeError:
-        # handling situation when tokens is not Iterable (it is a leaf) - do nothing
-        pass
-
-
-def extract_sql_syntax_highlighting(tokens):
-    yield from extract_sql_syntax_highlighting_recursive_idx(tokens, 0)
-
-
-class GenericSqlParserHighlighter(SyntaxHighlighter):
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # default formatting
-        self.keyword_format = keyword_format
-        self.function_format = function_format
-        self.string_literal_format = string_literal_format
-        self.number_format = number_format
-        self.comment_format = comment_format
-        self.function_format = function_format
-
-    def highlightBlock(self, text: str):
-        parsed = sqlparse.parse(text)
-        syntax_highlight = extract_sql_syntax_highlighting(parsed)
-        for tag in syntax_highlight:
-            self.setFormat(tag.start_pos, tag.end_pos - tag.start_pos, tag_format[tag.tag])
-
-
-class HighlightingRule:
-    def __init__(self, pattern, pattern_format):
-        self.pattern = pattern
-        self.pattern_format = pattern_format
-
-
-
 class GenericSqlHighlighter(SyntaxHighlighter):
+    """
+    Syntax Highlighter for Qt TextEdit components to use.
+    No specific SQL dialect.
+    """
+
     class BlockCommentState:
         COMMENT = 1
         NOT_COMMENT = 0
@@ -147,33 +65,16 @@ class GenericSqlHighlighter(SyntaxHighlighter):
         self.number_format = number_format
         self.comment_format = comment_format
         self.function_format = function_format
-        #
-        self.highlighting_rules = []
-
-        for keyword in SQL_2016_STANDARD_KEYWORDS:
-            keyword_regexp = f'\\b{re.escape(keyword)}\\b'
-            pattern = re.compile(keyword_regexp, re.IGNORECASE)
-            self.highlighting_rules.append(HighlightingRule(pattern, self.keyword_format))
-
-        # for func in ANSI_FUNCTIONS:
-        #     pattern = re.compile(re.escape(func), re.IGNORECASE)
-        #     self.highlighting_rules.append(HighlightingRule(pattern, self.function_format))
-        #
-        # string_literal_pattern = re.compile("\'.*\'")
-        # self.highlighting_rules.append(HighlightingRule(string_literal_pattern, self.string_literal_format))
-        #
-        # single_comment_pattern = re.compile("--[^\n]*")
-        # self.highlighting_rules.append(HighlightingRule(single_comment_pattern, self.comment_format))
 
         self.comment_start_pattern = re.compile(re.escape("/*"))
         self.comment_end_pattern = re.compile(re.escape("*/"))
 
-    def highlight_keywords(self, text):
-        for rule in self.highlighting_rules:
-            for match in re.finditer(rule.pattern, text):
-                self.setFormat(match.start(), match.end() - match.start(), rule.pattern_format)
-
     def highlight_parsed_items(self, text):
+        """
+        Determine tagged sql tokens to highlight.
+        Handles: keywords, functions, numbers, quoted strings, line comments.
+        :param text: text changed
+        """
         parsed = sqlparse.parse(text)
         syntax_highlight = (t for t in extract_sql_syntax_highlighting(parsed)
                             if t.tag not in (TokenHighlightTypeTag.TEXT,))
@@ -181,6 +82,12 @@ class GenericSqlHighlighter(SyntaxHighlighter):
             self.setFormat(tag.start_pos, tag.end_pos - tag.start_pos, tag_format[tag.tag])
 
     def highlight_block_comment(self, text):
+        """
+        Finds and set highlighting for SQL block comment.
+        Method goes out of provided changed text parameter and search for closing comment token in next text blocks.
+        It's much faster than parsing whole text editor content for finding multiline comments.
+        :param text: changed text
+        """
         # https://doc.qt.io/qt-5/qtwidgets-richtext-syntaxhighlighter-example.html
         self.setCurrentBlockState(self.BlockCommentState.NOT_COMMENT)
         start_index = 0
@@ -201,7 +108,6 @@ class GenericSqlHighlighter(SyntaxHighlighter):
             start_index = match.start() if match else -1
 
     def highlightBlock(self, text):
-        pass
-        # self.highlight_keywords(text)
+        """Highlight block event called."""
         self.highlight_parsed_items(text)
         self.highlight_block_comment(text)

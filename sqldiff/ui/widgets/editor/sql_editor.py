@@ -1,25 +1,23 @@
 from PyQt5 import QtGui
 from PyQt5.QtCore import QSize, QRect, Qt
-from PyQt5.QtGui import QColor, QTextFormat, QPaintEvent, QPainter, QTextCharFormat
-from PyQt5.QtWidgets import QTextEdit, QPlainTextEdit, QWidget, QVBoxLayout
+from PyQt5.QtGui import QPaintEvent, QPainter, QTextCharFormat
+from PyQt5.QtWidgets import QPlainTextEdit, QWidget, QVBoxLayout
 
-from sqldiff.ui.widgets.editor.area_highlighter import SqlStatementsBackgroundHighlighterRanged, \
-    TextEditorCurrentLineFormatter, \
-    SqlStatementsBackgroundHighlighter, CompositeEditorHighlighter
-from sqldiff.ui.widgets.editor.syntax_highlighter import GenericSqlHighlighter
+from sqldiff.ui.widgets.editor.area_highlighter import SqlAtCursorFinder, FormattingManager
+from sqldiff.ui.widgets.editor.syntax_highlighter import SyntaxHighlighter
 
 
 class CodeTextEdit(QPlainTextEdit):
+    """
+    QPlainTextEdit class extended by line numbering functionality.
+    """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.current_line_format = QTextCharFormat()
-
         self.lineNumberArea = LineNumberArea(self)
-
         self.blockCountChanged.connect(self.update_line_number_area_width)
         self.updateRequest.connect(self.update_line_number_area)
-
         self.update_line_number_area_width(0)
 
         doc = self.document()
@@ -88,11 +86,20 @@ class LineNumberArea(QWidget):
 
 
 class SqlTextEdit(CodeTextEdit):
+    """
+    Sql Text Edit class. Support syntax highlighting, finding and highlighting queries at cursor position.
+    """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.syntax_highlighter = GenericSqlHighlighter(self.document())
+        self.syntax_highlighter: SyntaxHighlighter = None
+        self.formatting_manager: FormattingManager = None
+        self.sql_at_cursor_finder: SqlAtCursorFinder = None
 
-        self.composite_highlighter = CompositeEditorHighlighter(self)
+        self.cursorPositionChanged.connect(self.cursor_position_changed_action)
+
+    def cursor_position_changed_action(self):
+        self.sql_at_cursor_finder.find_query_range_at_index()
+        self.formatting_manager.apply_formatting()
 
 
 class SqlEditorWidget(QWidget):
