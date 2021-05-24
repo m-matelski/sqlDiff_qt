@@ -45,7 +45,7 @@ jobs:
     # See for QT_QPA_PLATFORM: https://github.com/therecipe/qt/issues/775
     - name: Dry run application build
       run: |
-        cp -R /build/dist/SqlDiff ~ && \
+        cp -R build/dist/SqlDiff ~ && \
         cd ~/SqlDiff && \
         export QT_QPA_PLATFORM=offscreen && \
         export QT_DEBUG_PLUGINS=1 && \
