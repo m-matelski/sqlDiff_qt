@@ -1,6 +1,7 @@
 # -*- mode: python ; coding: utf-8 -*-
 import os
 import platform
+from sqldiff.appdata.version import version
 
 block_cipher = None
 
@@ -30,8 +31,6 @@ a = Analysis(['sqldiff/main.py', 'migrations/env.py'],
 # Add alebic migration directory with its content
 a.datas += Tree(MIGRATIONS_PATH, prefix=MIGRATIONS)
 
-print(f"{a.datas}")
-
 pyz = PYZ(a.pure, a.zipped_data,
           cipher=block_cipher)
 
@@ -49,6 +48,7 @@ exe = EXE(pyz,
           strip=False,
           upx=True,
           console=False)
+
 coll = COLLECT(exe,
                a.binaries,
                a.zipfiles,
@@ -61,6 +61,7 @@ coll = COLLECT(exe,
 if platform.system() == 'Darwin':
     print('macos')
     app = BUNDLE(coll,
+                 version=version,
                  name='SqlDiff.app',
                  icon=None,
                  bundle_identifier=None)
