@@ -1,7 +1,7 @@
 # -*- mode: python ; coding: utf-8 -*-
 import os
 import platform
-from sqldiff.appdata.version import version
+from .sqldiff.appdata.version import version
 
 block_cipher = None
 
