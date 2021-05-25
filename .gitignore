@@ -4,7 +4,7 @@
 
 build/dist
 build/tmp
-
+__pycache__
 
 .idea
 
