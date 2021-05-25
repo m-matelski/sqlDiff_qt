@@ -1,9 +1,11 @@
 # Project exclude paths
 /venv/
 /dist/
-/build/
 
+build/dist
+build/tmp
 
+__pycache__/
 
 .idea
 

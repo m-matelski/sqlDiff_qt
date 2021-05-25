@@ -8,3 +8,4 @@ alembic==1.5.8
 SQLAlchemy==1.4.9
 SQLAlchemy-Utils==0.37.0
 pyinstaller==4.3
+bump2version==1.0.1
