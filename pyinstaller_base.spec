@@ -1,7 +1,6 @@
 # -*- mode: python ; coding: utf-8 -*-
 import os
 import platform
-from .sqldiff.appdata.version import version
 
 block_cipher = None
 
@@ -43,6 +42,7 @@ exe = EXE(pyz,
           [],
           exclude_binaries=True,
           name='SqlDiff',
+          icon='build/resources/sqldiff_icon.ico',
           debug=False,
           bootloader_ignore_signals=False,
           strip=False,
@@ -61,7 +61,7 @@ coll = COLLECT(exe,
 if platform.system() == 'Darwin':
     print('macos')
     app = BUNDLE(coll,
-                 version=version,
+                 version=None,
                  name='SqlDiff.app',
                  icon=None,
                  bundle_identifier=None)
