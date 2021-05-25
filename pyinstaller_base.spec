@@ -1,10 +1,10 @@
 # -*- mode: python ; coding: utf-8 -*-
 import os
-
+import platform
 
 block_cipher = None
 
-#Dynamically set paths
+# Dynamically set paths
 SPEC_ROOT = os.path.abspath(SPECPATH)
 SQLDIFF = os.path.join(SPEC_ROOT, 'sqldiff')
 MIGRATIONS = 'migrations'
@@ -32,9 +32,8 @@ a.datas += Tree(MIGRATIONS_PATH, prefix=MIGRATIONS)
 
 print(f"{a.datas}")
 
-
 pyz = PYZ(a.pure, a.zipped_data,
-             cipher=block_cipher)
+          cipher=block_cipher)
 
 # remove /migrations/env.py script from execution scripts
 # We don't want to execute env.py itself after main application finish its work
@@ -49,7 +48,7 @@ exe = EXE(pyz,
           bootloader_ignore_signals=False,
           strip=False,
           upx=True,
-          console=True )
+          console=False)
 coll = COLLECT(exe,
                a.binaries,
                a.zipfiles,
@@ -58,3 +57,10 @@ coll = COLLECT(exe,
                upx=True,
                upx_exclude=[],
                name='SqlDiff')
+
+if platform.system() == 'Darwin':
+    print('macos')
+    app = BUNDLE(coll,
+                 name='SqlDiff.app',
+                 icon=None,
+                 bundle_identifier=None)

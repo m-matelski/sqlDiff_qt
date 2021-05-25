@@ -4,8 +4,6 @@
 
 pyinstaller \
  --clean \
- --log-level INFO \
- --windowed \
  --noconfirm \
  --distpath build/dist \
  --workpath build/tmp \
