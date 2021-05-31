@@ -37,7 +37,7 @@ jobs:
     - name: Windows build
       if: matrix.os == 'windows-latest'
       run: |
-        ./pyinstaller_start.sh
+        bash pyinstaller_start.sh
         
     - name: Windows compress build
       if: matrix.os == 'windows-latest'
