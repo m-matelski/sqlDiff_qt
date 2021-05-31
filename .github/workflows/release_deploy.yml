@@ -44,12 +44,12 @@ jobs:
       run: |
         ls
         ls build
-        7z a -tzip SqlDiff_win.zip build\dist\SqlDiff
+        7z a -tzip SqlDiff_win.zip .\build\dist\*
       
     - name: Upload asset
       uses: softprops/action-gh-release@v1
       with:
-        files: SqlDiff_win.zip
+        files: SqlDiff*.zip
 #         tag_name: ${{ env.VERSION }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
