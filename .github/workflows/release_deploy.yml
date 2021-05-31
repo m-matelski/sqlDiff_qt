@@ -42,6 +42,8 @@ jobs:
     - name: Windows compress build
       if: matrix.os == 'windows-latest'
       run: |
+        ls
+        ls build
         7z a -tzip SqlDiff_win.zip build\dist\SqlDiff
       
     - name: Upload asset
