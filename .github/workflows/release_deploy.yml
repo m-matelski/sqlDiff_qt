@@ -44,7 +44,7 @@ jobs:
       run: |
         ls
         ls build
-        7z a -tzip SqlDiff_win.zip .\build\dist\*
+        7z a -tzip SqlDiff_win_${{ env.VERSION }}.zip .\build\dist\*
       
     - name: Upload asset
       uses: softprops/action-gh-release@v1
