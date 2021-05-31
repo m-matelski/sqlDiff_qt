@@ -4,6 +4,9 @@ import platform
 
 block_cipher = None
 
+with open('VERSION', 'r') as file:
+    VERSION = file.read()
+
 # Dynamically set paths
 SPEC_ROOT = os.path.abspath(SPECPATH)
 SQLDIFF = os.path.join(SPEC_ROOT, 'sqldiff')
@@ -12,6 +15,7 @@ MIGRATIONS_PATH = os.path.join(SPEC_ROOT, MIGRATIONS)
 
 print(f'{SPEC_ROOT=}')
 print(f'{SQLDIFF=}')
+print(f'{VERSION=}')
 
 a = Analysis(['sqldiff/main.py', 'migrations/env.py'],
              pathex=[SPEC_ROOT, SQLDIFF, MIGRATIONS_PATH],
@@ -61,7 +65,7 @@ coll = COLLECT(exe,
 if platform.system() == 'Darwin':
     print('macos')
     app = BUNDLE(coll,
-                 version=None,
+                 version=VERSION,
                  name='SqlDiff.app',
                  icon=None,
                  bundle_identifier=None)
