@@ -38,7 +38,7 @@ jobs:
     - name: Windows compress build
       if: matrix.os == 'windows-latest'
       run: |
-        7z a -tzip SqlDiff_win.zip build/dist/SqlDiff
+        7z a -tzip SqlDiff_win.zip build\dist\SqlDiff
       
     - name: Upload asset
       uses: softprops/action-gh-release@v1
