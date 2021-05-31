@@ -42,7 +42,7 @@ jobs:
         zip SqlDiff-macos-${{ env.VERSION }}.zip SqlDiff -r
         
     - name: Ubuntu build
-      if: matrix.os == 'macos-latest'
+      if: matrix.os == 'ubuntu-latest'
       run: |
         ./pyinstaller_start.sh
         cp build/dist/SqlDiff -r  .
