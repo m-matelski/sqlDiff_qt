@@ -49,7 +49,7 @@ jobs:
       run: |
         ./pyinstaller_start.sh
         cp build/dist/SqlDiff -r  .
-        zip SqlDiff-macos-${{ env.VERSION }}.zip SqlDiff -r
+        zip SqlDiff-ubuntu-${{ env.VERSION }}.zip SqlDiff -r
         
         
     - name: Upload asset
