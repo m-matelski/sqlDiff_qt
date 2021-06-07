@@ -1,12 +1,11 @@
 from PyQt5 import QtGui
 from PyQt5.QtWidgets import QMainWindow
 
-from sqldiff.ui.connection_manager import ConnectionListViewManagerFactory
+from sqldiff.ui.widgets.predesigned.connection_manager import ConnectionListViewManagerFactory
 from sqldiff.ui.designer.ui_main_window import Ui_MainWindow
 # from sqldiff.ui.driver_manager import DriverManager
-from sqldiff.ui.driver_manager import DriverListViewManagerFactory
-from sqldiff.ui.widgets.editor.factory import BaseSqlEditorFactory
-from sqldiff.ui.widgets.editor.sql_editor import SqlEditorWidget
+from sqldiff.ui.widgets.predesigned.driver_manager import DriverListViewManagerFactory
+from sqldiff.ui.widgets.sqleditor.factory import BaseSqlEditorFactory
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):

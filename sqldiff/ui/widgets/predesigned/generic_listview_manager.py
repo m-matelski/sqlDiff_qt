@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QWidget, QMessageBox
 from sqldiff.ui.designer.ui_generic_crud_listview_manager import Ui_GenericLisviewItemManager
 from PyQt5 import QtCore
 
-from sqldiff.ui.messageboxes import ConfirmMessageBoxProvider
+from sqldiff.ui.utils.messageboxes import ConfirmMessageBoxProvider
 
 
 class SelectableListViewMixin:

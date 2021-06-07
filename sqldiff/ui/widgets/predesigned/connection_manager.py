@@ -3,11 +3,11 @@ from PyQt5.QtCore import Qt
 
 from sqldiff.appdata import schemas
 from sqldiff.appdata.crud import get_connections, get_driver_type_by_connection, delete_connection
-from sqldiff.ui.connection_basic_form import ConnectionBasicForm
-from sqldiff.ui.driver_selector import DriverSelector
-from sqldiff.ui.generic_listview_manager import GenericListviewManagerWindow, ListViewManagerFactoryMethod
-from sqldiff.ui.messageboxes import ConfirmMessageBoxProvider
-from sqldiff.ui.resources import DbIconsProvider
+from sqldiff.ui.widgets.predesigned.connection_basic_form import ConnectionBasicForm
+from sqldiff.ui.widgets.predesigned.driver_selector import DriverSelector
+from sqldiff.ui.widgets.predesigned.generic_listview_manager import GenericListviewManagerWindow, ListViewManagerFactoryMethod
+from sqldiff.ui.utils.messageboxes import ConfirmMessageBoxProvider
+from sqldiff.ui.utils.resources import DbIconsProvider
 
 
 class ConnectionModel(QtCore.QAbstractListModel):

@@ -7,14 +7,14 @@ from pydantic import ValidationError
 from sqlalchemy.exc import IntegrityError
 
 from sqldiff.appdata import schemas
-from sqldiff.appdata.crud import upsert_connection, get_connection_by_name
+from sqldiff.appdata.crud import upsert_connection
 from sqldiff.appdata.dbconf import db_session
 from sqldiff.db.connection import ConnectionApp
 from sqldiff.ui.designer.ui_connection_basic_form import Ui_ConnectionBasicForm
 from PyQt5 import QtCore, QtGui
 
-from sqldiff.ui.messageboxes import SaveChangesMessageBoxProvider
-from sqldiff.ui.resources import DbIconsProvider
+from sqldiff.ui.utils.messageboxes import SaveChangesMessageBoxProvider
+from sqldiff.ui.utils.resources import DbIconsProvider
 
 
 class ConnectionBasicForm(QWidget, Ui_ConnectionBasicForm):

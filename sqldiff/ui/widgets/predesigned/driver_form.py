@@ -1,13 +1,10 @@
-from collections import namedtuple
 from dataclasses import dataclass
 from enum import Enum
-from functools import lru_cache, cached_property
+from functools import cached_property
 from pathlib import Path
 from typing import List
 
 from sqlalchemy.exc import IntegrityError
-
-from sqldiff.appdata import models, schemas
 
 from PyQt5 import QtCore, QtGui
 from PyQt5.QtWidgets import QWidget, QFileDialog, QStyle, QMessageBox
@@ -20,8 +17,8 @@ from sqldiff.appdata.path import ResourcePaths
 from sqldiff.ui.designer.ui_driver_form import Ui_DriverForm
 from PyQt5.QtCore import Qt
 
-from sqldiff.ui.messageboxes import SaveChangesMessageBoxProvider
-from sqldiff.ui.resources import DbIconsProvider
+from sqldiff.ui.utils.messageboxes import SaveChangesMessageBoxProvider
+from sqldiff.ui.utils.resources import DbIconsProvider
 
 generic_driver_type = 'Generic'
 

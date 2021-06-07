@@ -3,8 +3,8 @@ from PyQt5 import QtCore
 
 from sqldiff.appdata import schemas
 from sqldiff.ui.designer.ui_driver_selector import Ui_DriverSelector
-from sqldiff.ui.driver_manager import DriverModel
-from sqldiff.ui.generic_listview_manager import SelectableListViewMixin
+from sqldiff.ui.widgets.predesigned.driver_manager import DriverModel
+from sqldiff.ui.widgets.predesigned.generic_listview_manager import SelectableListViewMixin
 
 
 class DriverSelector(QWidget, Ui_DriverSelector, SelectableListViewMixin):

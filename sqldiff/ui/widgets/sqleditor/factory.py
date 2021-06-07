@@ -2,12 +2,12 @@ from abc import ABC, abstractmethod
 
 from PyQt5.QtGui import QTextCharFormat, QColor
 
-from sqldiff.ui.widgets.editor.area_highlighter import EditorType, FormattingManager, CurrentLineFormatter, \
+from sqldiff.ui.widgets.sqleditor.area_highlighter import EditorType, FormattingManager, CurrentLineFormatter, \
     CurrentSqlStatementHighlighter, SqlAtCursorFinder
-from sqldiff.ui.widgets.editor.sql_editor import SqlTextEdit
-from sqldiff.ui.widgets.editor.syntax_highlighter import GenericSqlHighlighter
+from sqldiff.ui.widgets.sqleditor.sql_editor import SqlTextEdit
+from sqldiff.ui.widgets.sqleditor.syntax_highlighter import GenericSqlHighlighter
 
-# Sql editor default highlight formats
+# Sql sqleditor default highlight formats
 current_sql_format = QTextCharFormat()
 current_sql_format.setBackground(QColor(150, 110, 190, 50))
 

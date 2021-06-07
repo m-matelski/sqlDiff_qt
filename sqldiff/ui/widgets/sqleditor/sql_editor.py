@@ -3,8 +3,8 @@ from PyQt5.QtCore import QSize, QRect, Qt
 from PyQt5.QtGui import QPaintEvent, QPainter, QTextCharFormat
 from PyQt5.QtWidgets import QPlainTextEdit, QWidget, QVBoxLayout
 
-from sqldiff.ui.widgets.editor.area_highlighter import SqlAtCursorFinder, FormattingManager
-from sqldiff.ui.widgets.editor.syntax_highlighter import SyntaxHighlighter
+from sqldiff.ui.widgets.sqleditor.area_highlighter import SqlAtCursorFinder, FormattingManager
+from sqldiff.ui.widgets.sqleditor.syntax_highlighter import SyntaxHighlighter
 
 
 class CodeTextEdit(QPlainTextEdit):

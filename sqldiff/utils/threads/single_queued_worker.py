@@ -16,7 +16,7 @@ If new request for the same worker is sent, and worker is not in progress
 - new worker will be started immediately. 
 
 Main purpose of this type of worker is handling GUI highlighting in background,
-for example when user scrolls through text editor fast,
+for example when user scrolls through text sqleditor fast,
 and a lot of signals are sent. 
 This will prevent GUI actions to be called too many times in classical queued approach.
 """

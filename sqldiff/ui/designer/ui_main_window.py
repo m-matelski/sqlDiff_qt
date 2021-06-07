@@ -107,5 +107,5 @@ class Ui_MainWindow(object):
         self.actionAddConnection.setText(_translate("MainWindow", "Add Connection"))
         self.actionAddConnection.setToolTip(_translate("MainWindow", "<html><head/><body><p>Add new database connection.</p></body></html>"))
         self.actionNewSqlEditor.setText(_translate("MainWindow", "New SQL Editor"))
-        self.actionNewSqlEditor.setToolTip(_translate("MainWindow", "Creates new SQL editor"))
+        self.actionNewSqlEditor.setToolTip(_translate("MainWindow", "Creates new SQL sqleditor"))
 from . import resources_rc

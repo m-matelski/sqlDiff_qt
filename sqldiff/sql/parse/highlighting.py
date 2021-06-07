@@ -6,7 +6,7 @@ import sqlparse
 
 """
 Parse sql statement and tag certain parts of statement.
-Tags are used in text editor syntax highlighting.
+Tags are used in text sqleditor syntax highlighting.
 """
 
 

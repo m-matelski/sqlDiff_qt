@@ -1,16 +1,14 @@
-from PyQt5.QtWidgets import QWidget, QMessageBox
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore
 from PyQt5.QtCore import Qt
 
-from sqldiff.appdata.crud import get_drivers, delete_driver, get_driver_types
+from sqldiff.appdata.crud import get_drivers, delete_driver
 
-from sqldiff.ui.driver_form import DriverForm
+from sqldiff.ui.widgets.predesigned.driver_form import DriverForm
 from sqldiff.appdata import schemas
 
-from sqldiff.appdata.dbconf import db_session
-from sqldiff.ui.generic_listview_manager import ListViewManagerFactoryMethod, GenericListviewManagerWindow
-from sqldiff.ui.messageboxes import ConfirmMessageBoxProvider
-from sqldiff.ui.resources import DbIconsProvider
+from sqldiff.ui.widgets.predesigned.generic_listview_manager import ListViewManagerFactoryMethod, GenericListviewManagerWindow
+from sqldiff.ui.utils.messageboxes import ConfirmMessageBoxProvider
+from sqldiff.ui.utils.resources import DbIconsProvider
 
 
 class DriverModel(QtCore.QAbstractListModel):

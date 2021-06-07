@@ -44,7 +44,7 @@ def _get_queries_in_range(sql: str, range_index: range, sub: Sub = _sub_identity
     """
     Returns all sql statements and their positions in provided range
     :param sql: SQL statement
-    :param range_index: range index to search (similar to text selection in editor)
+    :param range_index: range index to search (similar to text selection in sqleditor)
     :param sub: sub parse function - identity by default
     :return: Iterable of sql str and range position in provided sql
     """
@@ -125,7 +125,7 @@ def get_queries_to_highlight(sql: str, range_index: range):
     Generate list of queries positions within range.
     Remove leading and trailing comments and whitespaces from returned range position.
     :param sql: SQL statement
-    :param range_index: range index to search (similar to text selection in editor)
+    :param range_index: range index to search (similar to text selection in sqleditor)
     :return: List of sql statements and their positions in provided sql string, within range.
     Removes Whitespaces and leading comments.
     """

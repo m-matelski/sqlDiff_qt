@@ -9,7 +9,7 @@ from sqldiff.sql.parse.highlighting import TokenHighlightTypeTag, extract_sql_sy
 Syntax highlighters for QPlainTextEdit components.
 
 QSyntaxHighlighter class allows to overwrite highlightBlock method to handle formatting for changed text.
-This method provides text parameter with only portion of text from text editor 
+This method provides text parameter with only portion of text from text sqleditor 
 which have been changed and needs to define it's syntax highlighting.
 
 """
@@ -85,7 +85,7 @@ class GenericSqlHighlighter(SyntaxHighlighter):
         """
         Finds and set highlighting for SQL block comment.
         Method goes out of provided changed text parameter and search for closing comment token in next text blocks.
-        It's much faster than parsing whole text editor content for finding multiline comments.
+        It's much faster than parsing whole text sqleditor content for finding multiline comments.
         :param text: changed text
         """
         # https://doc.qt.io/qt-5/qtwidgets-richtext-syntaxhighlighter-example.html

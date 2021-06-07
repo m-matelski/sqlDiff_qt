@@ -19,8 +19,8 @@ def selections_equal(s1, s2):
 def get_document_viewport_range(editor: EditorType):
     """
     Finds start and end cursor positions of visible viewport of QTextEditor
-    :param editor: editor instance
-    :return: range of start and end positions of visible vieport of editor.
+    :param editor: sqleditor instance
+    :return: range of start and end positions of visible vieport of sqleditor.
     """
     cursor = editor.cursorForPosition(QPoint(0, 0))
     start_pos = cursor.position()
@@ -46,8 +46,8 @@ def move_cursor_by_lines(editor: EditorType, cursor_pos: int, move_operation, n:
 
 def extend_range_by_lines(editor: EditorType, e_range: range, lines_up: int, lines_down: int) -> range:
     """
-    Extends e_range start position up by lines_up in editor. Extends e_range end position up by lines_down in editor.
-    :param editor: editor instance
+    Extends e_range start position up by lines_up in sqleditor. Extends e_range end position up by lines_down in sqleditor.
+    :param editor: sqleditor instance
     :param e_range: range start and end positions to start extending.
     :param lines_up: number of lines towards top of document to extend.
     :param lines_down: number of lines towards end of document to extend.
@@ -60,7 +60,7 @@ def extend_range_by_lines(editor: EditorType, e_range: range, lines_up: int, lin
 
 class TextEditorAreaFormatter:
     """
-    Defines a way to create format for selected text range in editor
+    Defines a way to create format for selected text range in sqleditor
     """
 
     def __init__(self, editor: EditorType):
@@ -79,7 +79,7 @@ class TextEditorAreaFormatter:
 
 class TextEditorCurrentLineFormatter:
     """
-    Defines a way to create format for full text editor line for current cursor position
+    Defines a way to create format for full text sqleditor line for current cursor position
     """
 
     def __init__(self, editor: EditorType):
@@ -102,7 +102,7 @@ class TextEditorFormatterBase(ABC):
 
     def __init__(self, editor: EditorType):
         """
-        :param editor: SqlTextEdit type editor
+        :param editor: SqlTextEdit type sqleditor
         (cannot use typing due to QtWidgets are unavailable until app initialization)
         """
         self.editor = editor
@@ -110,7 +110,7 @@ class TextEditorFormatterBase(ABC):
     @abstractmethod
     def highlight(self) -> Iterable[QTextEdit.ExtraSelection]:
         """
-        Generates formatting data for specified text editor.
+        Generates formatting data for specified text sqleditor.
         :return: Iterable of ExtraSelection (may return multiple formatting selections)
         """
         pass
@@ -118,7 +118,7 @@ class TextEditorFormatterBase(ABC):
 
 class SqlStatementsBackgroundFormatterRanged(TextEditorFormatterBase):
     """
-    Defines formatting for multiple sql statements in editor, without leading whitespaces and comments.
+    Defines formatting for multiple sql statements in sqleditor, without leading whitespaces and comments.
     """
 
     def __init__(self, editor: EditorType, h_format: QTextCharFormat):
@@ -143,7 +143,7 @@ class SqlStatementsBackgroundFormatterRanged(TextEditorFormatterBase):
 
 class CurrentLineFormatter(TextEditorFormatterBase):
     """
-    Defines formatting for text editor line on current cursor position
+    Defines formatting for text sqleditor line on current cursor position
     """
 
     def __init__(self, editor: EditorType, h_format: QTextCharFormat):
@@ -157,7 +157,7 @@ class CurrentLineFormatter(TextEditorFormatterBase):
 
 class SqlAtCursorFinder:
     """
-    Finds sql statement at current cursor position in text editor
+    Finds sql statement at current cursor position in text sqleditor
     """
 
     def __init__(self, editor: EditorType):
@@ -173,7 +173,7 @@ class SqlAtCursorFinder:
 
 class CurrentSqlStatementHighlighter(TextEditorFormatterBase):
     """
-    Finds and defines formatting for sql statement at current cursor position in editor.
+    Finds and defines formatting for sql statement at current cursor position in sqleditor.
     """
 
     def __init__(self, editor: EditorType, query_finder: SqlAtCursorFinder, h_format: QTextCharFormat):
@@ -190,9 +190,9 @@ class CurrentSqlStatementHighlighter(TextEditorFormatterBase):
 
 class FormattingManager:
     """
-    Formatting manager groups multiple text editor formatting data.
-    Manager iterates through formatters and applies them onto editor.
-    Trigger condition for apply_formatting method should be defined in editor class
+    Formatting manager groups multiple text sqleditor formatting data.
+    Manager iterates through formatters and applies them onto sqleditor.
+    Trigger condition for apply_formatting method should be defined in sqleditor class
     (depends on needs, formatter groups, etc).
     Formatters are applied in order of formatters list.
     """
@@ -203,7 +203,7 @@ class FormattingManager:
 
     def apply_formatting(self):
         """
-        Overwrites extra selections and applies formats from all formatters onto editor.
+        Overwrites extra selections and applies formats from all formatters onto sqleditor.
         :return:
         """
         extra_selections = list(chain(h for f in self.formatters for h in f.highlight()))
